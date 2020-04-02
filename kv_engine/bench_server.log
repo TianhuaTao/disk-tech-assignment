@@ -1,0 +1,111 @@
+engine_example
+[a2017010255@storage bench]$ srun -n1 -c 8 ./bench 1 50 0
+thread_num: 1, read ratio: 50%, isSkew: false
+open engine_path: ./data/test-1654458440446752
+1 thread, 200000 operations per thread, time: 998005.222000us
+throughput 200399.753019 operations/s
+
+[a2017010255@storage bench]$ srun -n1 -c 8 ./bench 4 50 0
+thread_num: 4, read ratio: 50%, isSkew: false
+open engine_path: ./data/test-1654516467358227
+4 thread, 200000 operations per thread, time: 7725261.818000us
+throughput 103556.360787 operations/s
+
+[a2017010255@storage bench]$ srun -n1 -c 8 ./bench 8 50 0
+thread_num: 8, read ratio: 50%, isSkew: false
+open engine_path: ./data/test-1654561050690600
+8 thread, 200000 operations per thread, time: 15168911.484000us
+throughput 105478.893570 operations/s
+
+[a2017010255@storage bench]$ srun -n1 -c 8 ./bench 16 50 0
+thread_num: 16, read ratio: 50%, isSkew: false
+open engine_path: ./data/test-1654631623016868
+16 thread, 200000 operations per thread, time: 26564611.233000us
+throughput 120461.013788 operations/s
+
+engine_race(mk2 8-buckets)
+[a2017010255@storage bench]$ srun -n1 -c 8 ./bench 1 50 0
+thread_num: 1, read ratio: 50%, isSkew: false
+open engine_path: ./data/test-1655474217848889
+1 thread, 200000 operations per thread, time: 1554158.581000us
+throughput 128686.996581 operations/s
+
+[a2017010255@storage bench]$ srun -n1 -c 8 ./bench 4 50 0
+thread_num: 4, read ratio: 50%, isSkew: false
+open engine_path: ./data/test-1655514024997401
+4 thread, 200000 operations per thread, time: 3350119.095000us
+throughput 238797.480721 operations/s
+
+[a2017010255@storage bench]$ srun -n1 -c 8 ./bench 8 50 0
+thread_num: 8, read ratio: 50%, isSkew: false
+open engine_path: ./data/test-1655543663679558
+8 thread, 200000 operations per thread, time: 5361520.771000us
+throughput 298422.792401 operations/s
+
+[a2017010255@storage bench]$ srun -n1 -c 8 ./bench 16 50 0
+thread_num: 16, read ratio: 50%, isSkew: false
+open engine_path: ./data/test-1655599607389035
+16 thread, 200000 operations per thread, time: 8185604.156000us
+throughput 390930.215903 operations/s
+
+[a2017010255@storage bench]$ srun -n1 -c 8 ./bench 16 50 0
+thread_num: 16, read ratio: 50%, isSkew: false
+open engine_path: ./data/test-1655642936664204
+16 thread, 200000 operations per thread, time: 8274286.734000us
+throughput 386740.283830 operations/s
+
+[a2017010255@storage bench]$ srun -n1 -c 8 ./bench 32 50 0
+thread_num: 32, read ratio: 50%, isSkew: false
+open engine_path: ./data/test-1655850339937452
+32 thread, 200000 operations per thread, time: 16361162.495000us
+throughput 391170.248566 operations/s
+
+[a2017010255@storage bench]$ srun -n1 -c 8 ./bench 64 50 0
+thread_num: 64, read ratio: 50%, isSkew: false
+open engine_path: ./data/test-1655695421952978
+64 thread, 200000 operations per thread, time: 49102454.893000us
+throughput 260679.430955 operations/s
+
+[a2017010255@storage bench]$ srun -n1 -c 8 ./bench 8 10 0
+thread_num: 8, read ratio: 10%, isSkew: false
+open engine_path: ./data/test-1656066025757130
+8 thread, 200000 operations per thread, time: 6343118.321000us
+throughput 252241.865756 operations/s
+
+[a2017010255@storage bench]$ srun -n1 -c 8 ./bench 8 90 0
+thread_num: 8, read ratio: 90%, isSkew: false
+open engine_path: ./data/test-1656115985073654
+8 thread, 200000 operations per thread, time: 2536014.068000us
+throughput 630911.326632 operations/s
+
+[a2017010255@storage bench]$ srun -n1 -c 8 ./bench 8 10 1
+thread_num: 8, read ratio: 10%, isSkew: true
+open engine_path: ./data/test-1656172546014915
+8 thread, 200000 operations per thread, time: 6564920.751000us
+throughput 243719.621407 operations/s
+
+[a2017010255@storage bench]$ srun -n1 -c 8 ./bench 8 50 1
+thread_num: 8, read ratio: 50%, isSkew: true
+open engine_path: ./data/test-1656208502062794
+8 thread, 200000 operations per thread, time: 5545825.468000us
+throughput 288505.292717 operations/s
+
+[a2017010255@storage bench]$ srun -n1 -c 8 ./bench 8 90 1
+thread_num: 8, read ratio: 90%, isSkew: true
+open engine_path: ./data/test-1656244838535921
+8 thread, 200000 operations per thread, time: 3222471.820000us
+throughput 496513.263536 operations/s
+
+tests:
+[a2017010255@storage test]$ ./run_test.sh 
+======================= single thread test ============================
+open engine_path: ./data/test-1654828927800171
+======================= single thread test pass :) ======================
+--------------------------------------
+======================= multi thread test ============================
+open engine_path: ./data/test-1654837943067366
+======================= multi thread test pass :) ======================
+--------------------------------------
+======================= crash test ============================
+open engine_path: ./data/test-1654855137779673
+======================= crash test pass :) ======================

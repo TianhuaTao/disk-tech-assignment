@@ -1,0 +1,43 @@
+engine_race(mk1, mmap):
+1 thread, 200000 operations per thread, time: 1084378.183000us
+throughput 184437.498961 operations/s
+
+engine_race(mk1, without mmap):
+1 thread, 200000 operations per thread, time: 828547.948000us
+throughput 241386.150895 operations/s
+
+engine_example:
+1 thread, 200000 operations per thread, time: 680016.563000us
+throughput 294110.483306 operations/s
+
+engine_race(mk2):
+
+thread_num: 1, read ratio: 50%, isSkew: false
+open engine_path: ./data/test-89691980180654
+1 thread, 200000 operations per thread, time: 938281.967000us
+throughput 213155.540695 operations/s
+
+thread_num: 4, read ratio: 50%, isSkew: false
+open engine_path: ./data/test-89571682013680
+4 thread, 200000 operations per thread, time: 1720622.422000us
+throughput 464948.026814 operations/s
+
+thread_num: 8, read ratio: 50%, isSkew: false
+open engine_path: ./data/test-89451494950384
+8 thread, 200000 operations per thread, time: 2535794.580000us
+throughput 630965.935734 operations/s
+
+thread_num: 32, read ratio: 50%, isSkew: false
+open engine_path: ./data/test-89835458612850
+32 thread, 200000 operations per thread, time: 19576826.733000us
+throughput 326917.129486 operations/s
+
+thread_num: 4, read ratio: 0%, isSkew: false
+open engine_path: ./data/test-90188584298604
+4 thread, 200000 operations per thread, time: 2113027.735000us
+throughput 378603.643837 operations/s
+
+thread_num: 4, read ratio: 90%, isSkew: false
+open engine_path: ./data/test-90372092501550
+4 thread, 200000 operations per thread, time: 1024820.107000us
+throughput 780624.808721 operations/s
