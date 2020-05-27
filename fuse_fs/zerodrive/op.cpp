@@ -1,16 +1,42 @@
 #define FUSE_USE_VERSION 31
 
 #include <fuse.h>
-#include <stdio.h>
-#include "sync_fs_op.h"
+#include <cstdio>
+#include "op.h"
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <dirent.h>
-#include <errno.h>
-#include <string.h>
+#include <cerrno>
+#include <cstring>
 #include <sys/types.h>
 #include <pwd.h>
+#include "DriveAgent.h"
+
+
+const char *get_homedir() {
+    static int initialized = 0;
+    static const char *homedir;
+    if (!initialized) {
+        struct passwd *pw = getpwuid(getuid());
+        homedir = pw->pw_dir;
+        initialized = 1;
+    }
+    return homedir;
+}
+
+const char *get_data_dir() {
+    static int initialized = 0;
+    static char datadir[512];
+    if (!initialized) {
+        memset(datadir, 0, sizeof datadir);
+        strcat(datadir, get_homedir());
+        strcat(datadir, "/zerodrive_internal");
+        initialized = 1;
+    }
+    return datadir;
+}
+
 /** Get file attributes.
  *
  * Similar to stat().  The 'st_dev' and 'st_blksize' fields are
@@ -22,15 +48,8 @@
  * `fi` will always be NULL if the file is not currently open, but
  * may also be NULL if the file is open.
  */
-int sync_getattr(const char *path, struct stat *stbuf, struct fuse_file_info *fi){
-	(void) fi;
-	int res;
-
-	res = lstat(path, stbuf);
-	if (res == -1)
-		return -errno;
-
-	return 0;
+int sync_getattr(const char *path, struct stat *stbuf, struct fuse_file_info *fi) {
+    return localAgent->Getattr(path, stbuf, fi);
 }
 
 /** Read the target of a symbolic link
@@ -41,16 +60,8 @@ int sync_getattr(const char *path, struct stat *stbuf, struct fuse_file_info *fi
  * buffer, it should be truncated.	The return value should be 0
  * for success.
  */
-int sync_readlink(const char *path, char *buf, size_t size)
-{
-	int res;
-
-	res = readlink(path, buf, size - 1);
-	if (res == -1)
-		return -errno;
-
-	buf[res] = '\0';
-	return 0;
+int sync_readlink(const char *path, char *buf, size_t size) {
+    return localAgent->Readlink(path, buf, size);
 }
 
 /** Create a file node
@@ -59,7 +70,7 @@ int sync_readlink(const char *path, char *buf, size_t size)
 	 * nodes.  If the filesystem defines a create() method, then for
 	 * regular files that will be called instead.
 	 */
-int sync_mknod(const char *, mode_t, dev_t);
+int sync_mknod(const char *path, mode_t mode, dev_t rdev);
 
 /** Create a directory
  *
@@ -67,42 +78,30 @@ int sync_mknod(const char *, mode_t, dev_t);
  * bits set, i.e. S_ISDIR(mode) can be false.  To obtain the
  * correct directory type bits use  mode|S_IFDIR
  * */
-int sync_mkdir(const char *path, mode_t mode)
-{
-	int res;
-
-	res = mkdir(path, mode);
-	if (res == -1)
-		return -errno;
-
-	return 0;
+int sync_mkdir(const char *path, mode_t mode) {
+    return localAgent->Mkdir(path, mode);
 }
 
 /** Remove a file */
-int sync_unlink(const char *path){
+int sync_unlink(const char *path) {
     int res;
+    CONVERT_PATH(real_path, path)
 
-	res = unlink(path);
-	if (res == -1)
-		return -errno;
+    res = unlink(real_path);
+    if (res == -1)
+        return -errno;
 
-	return 0;
+    return 0;
 }
 
 /** Remove a directory */
-int sync_rmdir(const char * path){
-    int res;
-
-	res = rmdir(path);
-	if (res == -1)
-		return -errno;
-
-	return 0;
+int sync_rmdir(const char *path) {
+    return localAgent->Rmdir(path);
 }
 
 /** Create a symbolic link */
-int sync_symlink(const char *target, const char *linkpath){
-    return symlink(target, linkpath);
+int sync_symlink(const char *from, const char *to) {
+    return localAgent->Symlink(from, to);
 }
 
 /** Rename a file
@@ -114,29 +113,21 @@ int sync_symlink(const char *target, const char *linkpath){
  * must atomically exchange the two files, i.e. both must
  * exist and neither may be deleted.
  */
-int sync_rename(const char *from, const char *to, unsigned int flags){
-	int res;
-
-	if (flags)
-		return -EINVAL;
-
-	res = rename(from, to);
-	if (res == -1)
-		return -errno;
-
-	return 0;
+int sync_rename(const char *from, const char *to, unsigned int flags) {
+    return localAgent->Rename(from, to, flags);
 }
 
 /** Create a hard link to a file */
-int sync_link(const char *from, const char *to)
-{
-	int res;
+int sync_link(const char *from, const char *to) {
+    int res;
+    CONVERT_PATH(real_from, from);
+    CONVERT_PATH(real_to, to);
 
-	res = link(from, to);
-	if (res == -1)
-		return -errno;
+    res = link(real_from, real_to);
+    if (res == -1)
+        return -errno;
 
-	return 0;
+    return 0;
 }
 
 /** Change the permission bits of a file
@@ -145,16 +136,8 @@ int sync_link(const char *from, const char *to)
  * may also be NULL if the file is open.
  */
 int sync_chmod(const char *path, mode_t mode,
-		     struct fuse_file_info *fi)
-{
-	(void) fi;
-	int res;
-
-	res = chmod(path, mode);
-	if (res == -1)
-		return -errno;
-
-	return 0;
+               struct fuse_file_info *fi) {
+    return localAgent->Chmod(path, mode, fi);
 }
 
 /** Change the owner and group of a file
@@ -165,7 +148,10 @@ int sync_chmod(const char *path, mode_t mode,
  * Unless FUSE_CAP_HANDLE_KILLPRIV is disabled, this method is
  * expected to reset the setuid and setgid bits.
  */
-int sync_chown(const char *, uid_t, gid_t, struct fuse_file_info *fi);
+int sync_chown(const char *path, uid_t uid, gid_t gid,
+               struct fuse_file_info *fi) {
+    return localAgent->Chown(path, uid, gid, fi);
+}
 
 /** Change the size of a file
  *
@@ -175,7 +161,20 @@ int sync_chown(const char *, uid_t, gid_t, struct fuse_file_info *fi);
  * Unless FUSE_CAP_HANDLE_KILLPRIV is disabled, this method is
  * expected to reset the setuid and setgid bits.
  */
-int sync_truncate(const char *, off_t, struct fuse_file_info *fi);
+int sync_truncate(const char *path, off_t size,
+                  struct fuse_file_info *fi) {
+    int res;
+    CONVERT_PATH(real_path, path);
+
+    if (fi != NULL)
+        res = ftruncate(fi->fh, size);
+    else
+        res = truncate(real_path, size);
+    if (res == -1)
+        return -errno;
+
+    return 0;
+}
 
 /** Open a file
  *
@@ -224,16 +223,8 @@ int sync_truncate(const char *, off_t, struct fuse_file_info *fi);
  * to the filesystem process.
  *
  */
-int sync_open(const char *path, struct fuse_file_info *fi){
-    int res;
-	printf("[debug] open\n");
-	CONVERT_PATH(real_path, path);
-	res = open(real_path, fi->flags);
-	if (res == -1)
-		return -errno;
-
-	fi->fh = res;
-	return 0;
+int sync_open(const char *path, struct fuse_file_info *fi) {
+    return localAgent->Open(path, fi);
 }
 
 /** Read data from an open file
@@ -246,27 +237,8 @@ int sync_open(const char *path, struct fuse_file_info *fi){
  * this operation.
  */
 int sync_read(const char *path, char *buf, size_t size, off_t offset,
-		    struct fuse_file_info *fi)
-{
-	int fd;
-	int res;
-	printf("[debug] read\n");
-	CONVERT_PATH(real_path, path);
-	if(fi == NULL)
-		fd = open(real_path, O_RDONLY);
-	else
-		fd = fi->fh;
-	
-	if (fd == -1)
-		return -errno;
-
-	res = pread(fd, buf, size, offset);
-	if (res == -1)
-		res = -errno;
-
-	if(fi == NULL)
-		close(fd);
-	return res;
+              struct fuse_file_info *fi) {
+    return localAgent->Read(path, buf, size, offset, fi);
 }
 
 /** Write data to an open file
@@ -279,29 +251,8 @@ int sync_read(const char *path, char *buf, size_t size, off_t offset,
  * expected to reset the setuid and setgid bits.
  */
 int sync_write(const char *path, const char *buf, size_t size,
-		     off_t offset, struct fuse_file_info *fi)
-{
-	int fd;
-	int res;
-	printf("[debug] write\n");
-	CONVERT_PATH(real_path, path);
-
-	(void) fi;
-	if(fi == NULL)
-		fd = open(real_path, O_WRONLY);
-	else
-		fd = fi->fh;
-	
-	if (fd == -1)
-		return -errno;
-
-	res = pwrite(fd, buf, size, offset);
-	if (res == -1)
-		res = -errno;
-
-	if(fi == NULL)
-		close(fd);
-	return res;
+               off_t offset, struct fuse_file_info *fi) {
+    return localAgent->Write(path, buf, size, offset, fi);
 }
 
 /** Get file system statistics
@@ -399,34 +350,11 @@ int sync_opendir(const char *, struct fuse_file_info *);
  * '1'.
  */
 int sync_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
-		       off_t offset, struct fuse_file_info *fi,
-		       enum fuse_readdir_flags flags)
-{
-	DIR *dp;
-	struct dirent *de;
-
-	(void) offset;
-	(void) fi;
-	(void) flags;
-
-	CONVERT_PATH(real_path, path);
-
-	dp = opendir(real_path);
-	if (dp == NULL)
-		return -errno;
-	
-	while ((de = readdir(dp)) != NULL) {
-		struct stat st;
-		memset(&st, 0, sizeof(st));
-		st.st_ino = de->d_ino;
-		st.st_mode = de->d_type << 12;
-		if (filler(buf, de->d_name, &st, 0, 0))
-			break;
-	}
-
-	closedir(dp);
-	return 0;
+                 off_t offset, struct fuse_file_info *fi,
+                 enum fuse_readdir_flags flags) {
+    return localAgent->Readdir(path, buf, filler, offset, fi, flags);
 }
+
 /** Release directory
  */
 int sync_releasedir(const char *, struct fuse_file_info *);
@@ -447,60 +375,10 @@ int sync_fsyncdir(const char *, int, struct fuse_file_info *);
  * value provided to fuse_main() / fuse_new().
  */
 void *sync_init(struct fuse_conn_info *conn,
-              struct fuse_config *cfg){
-				  (void) conn;
-	cfg->use_ino = 1;
-
-	/* Pick up changes from lower filesystem right away. This is
-	   also necessary for better hardlink support. When the kernel
-	   calls the unlink() handler, it does not know the inode of
-	   the to-be-removed entry and can therefore not invalidate
-	   the cache of the associated inode - resulting in an
-	   incorrect st_nlink value being reported for any remaining
-	   hardlinks to this inode. */
-	cfg->entry_timeout = 0;
-	cfg->attr_timeout = 0;
-	cfg->negative_timeout = 0;
-
-
-	printf("data path: %s\n", get_data_dir());
-
-	// TODO: check failure
-	if(mkdir(get_data_dir(), 0777)==-1){
-		if(errno==EEXIST){
-			// already exists
-			printf("found previous data\n");
-		}else
-		{
-			printf("cannot create data folder\n");
-		}
-	}
-
-	return NULL;
+                struct fuse_config *cfg) {
+    return localAgent->Init(conn, cfg);
 }
 
-
-const char *get_homedir(){
-	static int initialized = 0;
-	static const char *homedir;
-	if(!initialized){
-		struct passwd *pw = getpwuid(getuid());
-		homedir	 = pw->pw_dir;
-		initialized = 1;
-	}
-	return homedir;
-}
-const char *get_data_dir(){
-	static int initialized = 0;
-	static char datadir[512];
-	if(!initialized){
-		memset(datadir, 0, sizeof datadir);
-		strcat(datadir, get_homedir());
-		strcat(datadir, "/sync_fs_internal");
-		initialized = 1;
-	}
-	return datadir;
-}
 
 /**
  * Clean up filesystem
@@ -530,7 +408,10 @@ int sync_access(const char *, int);
  * versions earlier than 2.6.15, the mknod() and open() methods
  * will be called instead.
  */
-int sync_create(const char *, mode_t, struct fuse_file_info *);
+int sync_create(const char *path, mode_t mode,
+                struct fuse_file_info *fi) {
+    return localAgent->Create(path, mode, fi);
+}
 
 /**
  * Perform POSIX file locking operation
@@ -563,7 +444,7 @@ int sync_create(const char *, mode_t, struct fuse_file_info *);
  * interesting for network filesystems and similar.
  */
 int sync_lock(const char *, struct fuse_file_info *, int cmd,
-            struct flock *);
+              struct flock *);
 
 /**
  * Change the access and modification times of a file with
@@ -578,7 +459,7 @@ int sync_lock(const char *, struct fuse_file_info *, int cmd,
  * See the utimensat(2) man page for details.
  */
 int sync_utimens(const char *, const struct timespec tv[2],
-               struct fuse_file_info *fi);
+                 struct fuse_file_info *fi);
 
 /**
  * Map block index within file to block index within device
@@ -606,8 +487,7 @@ int sync_bmap(const char *, size_t blocksize, uint64_t *idx);
  */
 
 int sync_ioctl(const char *, int cmd, void *arg,
-             struct fuse_file_info *, unsigned int flags, void *data);
-
+               struct fuse_file_info *, unsigned int flags, void *data);
 
 /**
  * Poll for IO readiness events
@@ -625,7 +505,7 @@ int sync_ioctl(const char *, int cmd, void *arg,
  * fuse_pollhandle_destroy() when no longer in use.
  */
 int sync_poll(const char *, struct fuse_file_info *,
-            struct fuse_pollhandle *ph, unsigned *reventsp);
+              struct fuse_pollhandle *ph, unsigned *reventsp);
 
 /** Write contents of buffer to an open file
  *
@@ -637,7 +517,7 @@ int sync_poll(const char *, struct fuse_file_info *,
  * expected to reset the setuid and setgid bits.
  */
 int sync_write_buf(const char *, struct fuse_bufvec *buf, off_t off,
-                 struct fuse_file_info *);
+                   struct fuse_file_info *);
 
 /** Store data from an open file in a buffer
  *
@@ -654,7 +534,8 @@ int sync_write_buf(const char *, struct fuse_bufvec *buf, off_t off,
  * allocated memory will be freed by the caller.
  */
 int sync_read_buf(const char *, struct fuse_bufvec **bufp,
-                size_t size, off_t off, struct fuse_file_info *);
+                  size_t size, off_t off, struct fuse_file_info *);
+
 /**
  * Perform BSD file locking operation
  *
@@ -684,7 +565,7 @@ int sync_flock(const char *, struct fuse_file_info *, int op);
  * of space on the file system media.
  */
 int sync_fallocate(const char *, int, off_t, off_t,
-                 struct fuse_file_info *);
+                   struct fuse_file_info *);
 
 /**
  * Copy a range of data from one file to another
@@ -699,10 +580,10 @@ int sync_fallocate(const char *, int, off_t, off_t,
  * glibc release branches.)
  */
 ssize_t sync_copy_file_range(const char *path_in,
-                           struct fuse_file_info *fi_in,
-                           off_t offset_in, const char *path_out,
-                           struct fuse_file_info *fi_out,
-                           off_t offset_out, size_t size, int flags);
+                             struct fuse_file_info *fi_in,
+                             off_t offset_in, const char *path_out,
+                             struct fuse_file_info *fi_out,
+                             off_t offset_out, size_t size, int flags);
 
 /**
  * Find next data or hole after the specified offset

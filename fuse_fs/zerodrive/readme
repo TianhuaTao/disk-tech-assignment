@@ -1,0 +1,11 @@
+Compile:
+    make
+
+Start server:
+    ./zerodrive --server --address=127.0.0.1 --port=10086 tmp
+
+Start client:
+    ./zerodrive --client --address=192.168.0.100 --port=10086 tmp
+
+加 -f 来显示 printf 输出:
+    ./zerodrive -f --server --address=127.0.0.1 --port=10086 tmp

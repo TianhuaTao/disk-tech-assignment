@@ -10,13 +10,6 @@ public:
     virtual ~FileSystemAgent() = 0;
 };
 
-FileSystemAgent::FileSystemAgent()
-{
-}
-
-FileSystemAgent::~FileSystemAgent()
-{
-}
 
 
 class FileSystemServerAgent: public FileSystemAgent
@@ -28,14 +21,6 @@ public:
     ~FileSystemServerAgent();
 };
 
-FileSystemServerAgent::FileSystemServerAgent()
-{
-}
-
-FileSystemServerAgent::~FileSystemServerAgent()
-{
-}
-
 
 class FileSystemClientAgent: public FileSystemAgent
 {
@@ -46,10 +31,3 @@ public:
     ~FileSystemClientAgent();
 };
 
-FileSystemClientAgent::FileSystemClientAgent()
-{
-}
-
-FileSystemClientAgent::~FileSystemClientAgent()
-{
-}

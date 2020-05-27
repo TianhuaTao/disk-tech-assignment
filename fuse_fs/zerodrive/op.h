@@ -1,16 +1,20 @@
-#define FUSE_USE_VERSION 31
+#pragma once
 
 #include <fuse.h>
-#include <stdio.h>
-#include "sync_fs_op.h"
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <dirent.h>
-#include <errno.h>
-#include <string.h>
-#include <sys/types.h>
-#include <pwd.h>
+
+class DriveAgent;
+
+extern DriveAgent *localAgent;
+
+const char *get_homedir();
+
+const char *get_data_dir();
+
+#define CONVERT_PATH(newName, path) \
+        char newName [512];\
+        strcpy(newName, get_data_dir());\
+        strcat(newName, path);
+
 /** Get file attributes.
  *
  * Similar to stat().  The 'st_dev' and 'st_blksize' fields are
@@ -22,16 +26,7 @@
  * `fi` will always be NULL if the file is not currently open, but
  * may also be NULL if the file is open.
  */
-int sync_getattr(const char *path, struct stat *stbuf, struct fuse_file_info *fi){
-	(void) fi;
-	int res;
-
-	res = lstat(path, stbuf);
-	if (res == -1)
-		return -errno;
-
-	return 0;
-}
+int sync_getattr(const char *, struct stat *, struct fuse_file_info *fi);
 
 /** Read the target of a symbolic link
  *
@@ -41,24 +36,14 @@ int sync_getattr(const char *path, struct stat *stbuf, struct fuse_file_info *fi
  * buffer, it should be truncated.	The return value should be 0
  * for success.
  */
-int sync_readlink(const char *path, char *buf, size_t size)
-{
-	int res;
-
-	res = readlink(path, buf, size - 1);
-	if (res == -1)
-		return -errno;
-
-	buf[res] = '\0';
-	return 0;
-}
+int sync_readlink(const char *, char *, size_t);
 
 /** Create a file node
-	 *
-	 * This is called for creation of all non-directory, non-symlink
-	 * nodes.  If the filesystem defines a create() method, then for
-	 * regular files that will be called instead.
-	 */
+ *
+ * This is called for creation of all non-directory, non-symlink
+ * nodes.  If the filesystem defines a create() method, then for
+ * regular files that will be called instead.
+ */
 int sync_mknod(const char *, mode_t, dev_t);
 
 /** Create a directory
@@ -67,95 +52,37 @@ int sync_mknod(const char *, mode_t, dev_t);
  * bits set, i.e. S_ISDIR(mode) can be false.  To obtain the
  * correct directory type bits use  mode|S_IFDIR
  * */
-int sync_mkdir(const char *path, mode_t mode)
-{
-	int res;
-
-	res = mkdir(path, mode);
-	if (res == -1)
-		return -errno;
-
-	return 0;
-}
+int sync_mkdir(const char *path, mode_t mode);
 
 /** Remove a file */
-int sync_unlink(const char *path){
-    int res;
-
-	res = unlink(path);
-	if (res == -1)
-		return -errno;
-
-	return 0;
-}
+int sync_unlink(const char *path);
 
 /** Remove a directory */
-int sync_rmdir(const char * path){
-    int res;
-
-	res = rmdir(path);
-	if (res == -1)
-		return -errno;
-
-	return 0;
-}
+int sync_rmdir(const char *);
 
 /** Create a symbolic link */
-int sync_symlink(const char *target, const char *linkpath){
-    return symlink(target, linkpath);
-}
+int sync_symlink(const char *, const char *);
 
 /** Rename a file
- *
- * *flags* may be `RENAME_EXCHANGE` or `RENAME_NOREPLACE`. If
- * RENAME_NOREPLACE is specified, the filesystem must not
- * overwrite *newname* if it exists and return an error
- * instead. If `RENAME_EXCHANGE` is specified, the filesystem
- * must atomically exchange the two files, i.e. both must
- * exist and neither may be deleted.
- */
-int sync_rename(const char *from, const char *to, unsigned int flags){
-	int res;
-
-	if (flags)
-		return -EINVAL;
-
-	res = rename(from, to);
-	if (res == -1)
-		return -errno;
-
-	return 0;
-}
+	 *
+	 * *flags* may be `RENAME_EXCHANGE` or `RENAME_NOREPLACE`. If
+	 * RENAME_NOREPLACE is specified, the filesystem must not
+	 * overwrite *newname* if it exists and return an error
+	 * instead. If `RENAME_EXCHANGE` is specified, the filesystem
+	 * must atomically exchange the two files, i.e. both must
+	 * exist and neither may be deleted.
+	 */
+int sync_rename(const char *, const char *, unsigned int flags);
 
 /** Create a hard link to a file */
-int sync_link(const char *from, const char *to)
-{
-	int res;
-
-	res = link(from, to);
-	if (res == -1)
-		return -errno;
-
-	return 0;
-}
+int sync_link(const char *, const char *);
 
 /** Change the permission bits of a file
- *
- * `fi` will always be NULL if the file is not currenlty open, but
- * may also be NULL if the file is open.
- */
-int sync_chmod(const char *path, mode_t mode,
-		     struct fuse_file_info *fi)
-{
-	(void) fi;
-	int res;
-
-	res = chmod(path, mode);
-	if (res == -1)
-		return -errno;
-
-	return 0;
-}
+	 *
+	 * `fi` will always be NULL if the file is not currenlty open, but
+	 * may also be NULL if the file is open.
+	 */
+int sync_chmod(const char *, mode_t, struct fuse_file_info *fi);
 
 /** Change the owner and group of a file
  *
@@ -224,17 +151,7 @@ int sync_truncate(const char *, off_t, struct fuse_file_info *fi);
  * to the filesystem process.
  *
  */
-int sync_open(const char *path, struct fuse_file_info *fi){
-    int res;
-	printf("[debug] open\n");
-	CONVERT_PATH(real_path, path);
-	res = open(real_path, fi->flags);
-	if (res == -1)
-		return -errno;
-
-	fi->fh = res;
-	return 0;
-}
+int sync_open(const char *, struct fuse_file_info *);
 
 /** Read data from an open file
  *
@@ -245,29 +162,8 @@ int sync_open(const char *path, struct fuse_file_info *fi){
  * value of the read system call will reflect the return value of
  * this operation.
  */
-int sync_read(const char *path, char *buf, size_t size, off_t offset,
-		    struct fuse_file_info *fi)
-{
-	int fd;
-	int res;
-	printf("[debug] read\n");
-	CONVERT_PATH(real_path, path);
-	if(fi == NULL)
-		fd = open(real_path, O_RDONLY);
-	else
-		fd = fi->fh;
-	
-	if (fd == -1)
-		return -errno;
-
-	res = pread(fd, buf, size, offset);
-	if (res == -1)
-		res = -errno;
-
-	if(fi == NULL)
-		close(fd);
-	return res;
-}
+int sync_read(const char *, char *, size_t, off_t,
+              struct fuse_file_info *);
 
 /** Write data to an open file
  *
@@ -278,31 +174,8 @@ int sync_read(const char *path, char *buf, size_t size, off_t offset,
  * Unless FUSE_CAP_HANDLE_KILLPRIV is disabled, this method is
  * expected to reset the setuid and setgid bits.
  */
-int sync_write(const char *path, const char *buf, size_t size,
-		     off_t offset, struct fuse_file_info *fi)
-{
-	int fd;
-	int res;
-	printf("[debug] write\n");
-	CONVERT_PATH(real_path, path);
-
-	(void) fi;
-	if(fi == NULL)
-		fd = open(real_path, O_WRONLY);
-	else
-		fd = fi->fh;
-	
-	if (fd == -1)
-		return -errno;
-
-	res = pwrite(fd, buf, size, offset);
-	if (res == -1)
-		res = -errno;
-
-	if(fi == NULL)
-		close(fd);
-	return res;
-}
+int sync_write(const char *, const char *, size_t, off_t,
+               struct fuse_file_info *);
 
 /** Get file system statistics
  *
@@ -317,9 +190,9 @@ int sync_statfs(const char *, struct statvfs *);
  *
  * Flush is called on each close() of a file descriptor, as opposed to
  * release which is called on the close of the last file descriptor for
- * a file.  Under Linux, errors returned by flush() will be passed to 
+ * a file.  Under Linux, errors returned by flush() will be passed to
  * userspace as errors from close(), so flush() is a good place to write
- * back any cached dirty data. However, many applications ignore errors 
+ * back any cached dirty data. However, many applications ignore errors
  * on close(), and on non-Linux systems, close() may succeed even if flush()
  * returns an error. For these reasons, filesystems should not assume
  * that errors returned by flush will ever be noticed or even
@@ -374,13 +247,13 @@ int listxattr(const char *, char *, size_t);
 int removexattr(const char *, const char *);
 
 /** Open directory
-	 *
-	 * Unless the 'default_permissions' mount option is given,
-	 * this method should check if opendir is permitted for this
-	 * directory. Optionally opendir may also return an arbitrary
-	 * filehandle in the fuse_file_info structure, which will be
-	 * passed to readdir, releasedir and fsyncdir.
-	 */
+ *
+ * Unless the 'default_permissions' mount option is given,
+ * this method should check if opendir is permitted for this
+ * directory. Optionally opendir may also return an arbitrary
+ * filehandle in the fuse_file_info structure, which will be
+ * passed to readdir, releasedir and fsyncdir.
+ */
 int sync_opendir(const char *, struct fuse_file_info *);
 
 /** Read directory
@@ -398,35 +271,9 @@ int sync_opendir(const char *, struct fuse_file_info *);
  * is full (or an error happens) the filler function will return
  * '1'.
  */
-int sync_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
-		       off_t offset, struct fuse_file_info *fi,
-		       enum fuse_readdir_flags flags)
-{
-	DIR *dp;
-	struct dirent *de;
+int sync_readdir(const char *, void *, fuse_fill_dir_t, off_t,
+                 struct fuse_file_info *, enum fuse_readdir_flags);
 
-	(void) offset;
-	(void) fi;
-	(void) flags;
-
-	CONVERT_PATH(real_path, path);
-
-	dp = opendir(real_path);
-	if (dp == NULL)
-		return -errno;
-	
-	while ((de = readdir(dp)) != NULL) {
-		struct stat st;
-		memset(&st, 0, sizeof(st));
-		st.st_ino = de->d_ino;
-		st.st_mode = de->d_type << 12;
-		if (filler(buf, de->d_name, &st, 0, 0))
-			break;
-	}
-
-	closedir(dp);
-	return 0;
-}
 /** Release directory
  */
 int sync_releasedir(const char *, struct fuse_file_info *);
@@ -447,60 +294,7 @@ int sync_fsyncdir(const char *, int, struct fuse_file_info *);
  * value provided to fuse_main() / fuse_new().
  */
 void *sync_init(struct fuse_conn_info *conn,
-              struct fuse_config *cfg){
-				  (void) conn;
-	cfg->use_ino = 1;
-
-	/* Pick up changes from lower filesystem right away. This is
-	   also necessary for better hardlink support. When the kernel
-	   calls the unlink() handler, it does not know the inode of
-	   the to-be-removed entry and can therefore not invalidate
-	   the cache of the associated inode - resulting in an
-	   incorrect st_nlink value being reported for any remaining
-	   hardlinks to this inode. */
-	cfg->entry_timeout = 0;
-	cfg->attr_timeout = 0;
-	cfg->negative_timeout = 0;
-
-
-	printf("data path: %s\n", get_data_dir());
-
-	// TODO: check failure
-	if(mkdir(get_data_dir(), 0777)==-1){
-		if(errno==EEXIST){
-			// already exists
-			printf("found previous data\n");
-		}else
-		{
-			printf("cannot create data folder\n");
-		}
-	}
-
-	return NULL;
-}
-
-
-const char *get_homedir(){
-	static int initialized = 0;
-	static const char *homedir;
-	if(!initialized){
-		struct passwd *pw = getpwuid(getuid());
-		homedir	 = pw->pw_dir;
-		initialized = 1;
-	}
-	return homedir;
-}
-const char *get_data_dir(){
-	static int initialized = 0;
-	static char datadir[512];
-	if(!initialized){
-		memset(datadir, 0, sizeof datadir);
-		strcat(datadir, get_homedir());
-		strcat(datadir, "/sync_fs_internal");
-		initialized = 1;
-	}
-	return datadir;
-}
+                struct fuse_config *cfg);
 
 /**
  * Clean up filesystem
@@ -563,7 +357,7 @@ int sync_create(const char *, mode_t, struct fuse_file_info *);
  * interesting for network filesystems and similar.
  */
 int sync_lock(const char *, struct fuse_file_info *, int cmd,
-            struct flock *);
+              struct flock *);
 
 /**
  * Change the access and modification times of a file with
@@ -578,7 +372,7 @@ int sync_lock(const char *, struct fuse_file_info *, int cmd,
  * See the utimensat(2) man page for details.
  */
 int sync_utimens(const char *, const struct timespec tv[2],
-               struct fuse_file_info *fi);
+                 struct fuse_file_info *fi);
 
 /**
  * Map block index within file to block index within device
@@ -606,7 +400,7 @@ int sync_bmap(const char *, size_t blocksize, uint64_t *idx);
  */
 
 int sync_ioctl(const char *, int cmd, void *arg,
-             struct fuse_file_info *, unsigned int flags, void *data);
+               struct fuse_file_info *, unsigned int flags, void *data);
 
 
 /**
@@ -625,7 +419,7 @@ int sync_ioctl(const char *, int cmd, void *arg,
  * fuse_pollhandle_destroy() when no longer in use.
  */
 int sync_poll(const char *, struct fuse_file_info *,
-            struct fuse_pollhandle *ph, unsigned *reventsp);
+              struct fuse_pollhandle *ph, unsigned *reventsp);
 
 /** Write contents of buffer to an open file
  *
@@ -637,7 +431,7 @@ int sync_poll(const char *, struct fuse_file_info *,
  * expected to reset the setuid and setgid bits.
  */
 int sync_write_buf(const char *, struct fuse_bufvec *buf, off_t off,
-                 struct fuse_file_info *);
+                   struct fuse_file_info *);
 
 /** Store data from an open file in a buffer
  *
@@ -654,7 +448,8 @@ int sync_write_buf(const char *, struct fuse_bufvec *buf, off_t off,
  * allocated memory will be freed by the caller.
  */
 int sync_read_buf(const char *, struct fuse_bufvec **bufp,
-                size_t size, off_t off, struct fuse_file_info *);
+                  size_t size, off_t off, struct fuse_file_info *);
+
 /**
  * Perform BSD file locking operation
  *
@@ -684,7 +479,7 @@ int sync_flock(const char *, struct fuse_file_info *, int op);
  * of space on the file system media.
  */
 int sync_fallocate(const char *, int, off_t, off_t,
-                 struct fuse_file_info *);
+                   struct fuse_file_info *);
 
 /**
  * Copy a range of data from one file to another
@@ -699,10 +494,10 @@ int sync_fallocate(const char *, int, off_t, off_t,
  * glibc release branches.)
  */
 ssize_t sync_copy_file_range(const char *path_in,
-                           struct fuse_file_info *fi_in,
-                           off_t offset_in, const char *path_out,
-                           struct fuse_file_info *fi_out,
-                           off_t offset_out, size_t size, int flags);
+                             struct fuse_file_info *fi_in,
+                             off_t offset_in, const char *path_out,
+                             struct fuse_file_info *fi_out,
+                             off_t offset_out, size_t size, int flags);
 
 /**
  * Find next data or hole after the specified offset
