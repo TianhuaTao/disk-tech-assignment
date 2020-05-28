@@ -325,13 +325,13 @@ int listxattr(const char *, char *, size_t);
 int removexattr(const char *, const char *);
 
 /** Open directory
-	 *
-	 * Unless the 'default_permissions' mount option is given,
-	 * this method should check if opendir is permitted for this
-	 * directory. Optionally opendir may also return an arbitrary
-	 * filehandle in the fuse_file_info structure, which will be
-	 * passed to readdir, releasedir and fsyncdir.
-	 */
+ *
+ * Unless the 'default_permissions' mount option is given,
+ * this method should check if opendir is permitted for this
+ * directory. Optionally opendir may also return an arbitrary
+ * filehandle in the fuse_file_info structure, which will be
+ * passed to readdir, releasedir and fsyncdir.
+ */
 int sync_opendir(const char *, struct fuse_file_info *);
 
 /** Read directory

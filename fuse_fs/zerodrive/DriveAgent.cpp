@@ -11,7 +11,8 @@
 #include <cstdio>
 #include <pwd.h>
 #include <unistd.h>
-
+#include "NetworkAgent.h"
+#include <iostream>
 #include "op.h"
 
 void *DriveServerAgent::Init(struct fuse_conn_info *conn, struct fuse_config *cfg) {
@@ -180,7 +181,10 @@ int DriveServerAgent::Create(const char *path, mode_t mode, struct fuse_file_inf
 }
 
 DriveServerAgent::DriveServerAgent(const char* address, int port) {
-    // TODO: start listening
+    networkAgent = new NetworkAgent();
+    networkAgent->listenAsync(address, port, []() {
+        std::cout << "Got connection\n";
+    });
 }
 
 DriveServerAgent::~DriveServerAgent() {
