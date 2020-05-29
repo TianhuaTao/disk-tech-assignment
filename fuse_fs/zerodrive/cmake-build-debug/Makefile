@@ -150,6 +150,33 @@ DriveAgent.cpp.s:
 	$(MAKE) -f CMakeFiles/zerodrive.dir/build.make CMakeFiles/zerodrive.dir/DriveAgent.cpp.s
 .PHONY : DriveAgent.cpp.s
 
+NetworkAgent.o: NetworkAgent.cpp.o
+
+.PHONY : NetworkAgent.o
+
+# target to build an object file
+NetworkAgent.cpp.o:
+	$(MAKE) -f CMakeFiles/zerodrive.dir/build.make CMakeFiles/zerodrive.dir/NetworkAgent.cpp.o
+.PHONY : NetworkAgent.cpp.o
+
+NetworkAgent.i: NetworkAgent.cpp.i
+
+.PHONY : NetworkAgent.i
+
+# target to preprocess a source file
+NetworkAgent.cpp.i:
+	$(MAKE) -f CMakeFiles/zerodrive.dir/build.make CMakeFiles/zerodrive.dir/NetworkAgent.cpp.i
+.PHONY : NetworkAgent.cpp.i
+
+NetworkAgent.s: NetworkAgent.cpp.s
+
+.PHONY : NetworkAgent.s
+
+# target to generate assembly for a file
+NetworkAgent.cpp.s:
+	$(MAKE) -f CMakeFiles/zerodrive.dir/build.make CMakeFiles/zerodrive.dir/NetworkAgent.cpp.s
+.PHONY : NetworkAgent.cpp.s
+
 op.o: op.cpp.o
 
 .PHONY : op.o
@@ -216,6 +243,9 @@ help:
 	@echo "... DriveAgent.o"
 	@echo "... DriveAgent.i"
 	@echo "... DriveAgent.s"
+	@echo "... NetworkAgent.o"
+	@echo "... NetworkAgent.i"
+	@echo "... NetworkAgent.s"
 	@echo "... op.o"
 	@echo "... op.i"
 	@echo "... op.s"

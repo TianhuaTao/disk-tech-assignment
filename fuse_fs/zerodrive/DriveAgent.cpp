@@ -4,6 +4,7 @@
 #include "DriveAgent.h"
 #include <fcntl.h>
 #include <sys/stat.h>
+#include <cassert>
 #include <dirent.h>
 #include <cerrno>
 #include <cstring>
@@ -14,9 +15,10 @@
 #include "NetworkAgent.h"
 #include <iostream>
 #include "op.h"
+#include "Protocol.h"
 
 void *DriveServerAgent::Init(struct fuse_conn_info *conn, struct fuse_config *cfg) {
-    (void)conn;
+    (void) conn;
     cfg->use_ino = 1;
 
     /* Pick up changes from lower filesystem right away. This is
@@ -33,15 +35,11 @@ void *DriveServerAgent::Init(struct fuse_conn_info *conn, struct fuse_config *cf
     printf("data path: %s\n", get_data_dir());
 
     // TODO: check failure
-    if (mkdir(get_data_dir(), 0777) == -1)
-    {
-        if (errno == EEXIST)
-        {
+    if (mkdir(get_data_dir(), 0777) == -1) {
+        if (errno == EEXIST) {
             // already exists
             printf("found previous data\n");
-        }
-        else
-        {
+        } else {
             printf("cannot create data folder\n");
         }
     }
@@ -70,14 +68,13 @@ int DriveServerAgent::Read(const char *path, char *buf, size_t size, off_t offse
         close(fd);
 
 
-
     return res;
 }
 
 int DriveServerAgent::Getattr(const char *path, struct stat *stbuf, struct fuse_file_info *fi) {
-    (void)fi;
+    (void) fi;
     int res;
-    CONVERT_PATH(real_path,path)
+    CONVERT_PATH(real_path, path)
     res = lstat(real_path, stbuf);
     if (res == -1)
         return -errno;
@@ -91,7 +88,7 @@ int DriveServerAgent::Write(const char *path, const char *buf, size_t size, off_
     printf("[debug] write\n");
     CONVERT_PATH(real_path, path);
 
-    (void)fi;
+    (void) fi;
     if (fi == nullptr)
         fd = open(real_path, O_WRONLY);
     else
@@ -106,14 +103,19 @@ int DriveServerAgent::Write(const char *path, const char *buf, size_t size, off_
 
     if (fi == nullptr)
         close(fd);
-    // TODO: send signal to client
+
+    // send signal to client
+    std::vector<std::string> detail;
+    detail.push_back(std::string(path));
+    this->broadcastChanges(WRITE_DONE, detail);
+
     return res;
 }
 
 int DriveServerAgent::Rename(const char *from, const char *to, unsigned int flags) {
     int res;
-    CONVERT_PATH(real_from,from)
-    CONVERT_PATH(real_to,to)
+    CONVERT_PATH(real_from, from)
+    CONVERT_PATH(real_to, to)
     if (flags)
         return -EINVAL;
 
@@ -143,9 +145,9 @@ DriveServerAgent::Readdir(const char *path, void *buf, fuse_fill_dir_t filler, o
     DIR *dp;
     struct dirent *de;
 
-    (void)offset;
-    (void)fi;
-    (void)flags;
+    (void) offset;
+    (void) fi;
+    (void) flags;
 
     CONVERT_PATH(real_path, path);
 
@@ -153,13 +155,12 @@ DriveServerAgent::Readdir(const char *path, void *buf, fuse_fill_dir_t filler, o
     if (dp == nullptr)
         return -errno;
 
-    while ((de = readdir(dp)) != nullptr)
-    {
+    while ((de = readdir(dp)) != nullptr) {
         struct stat st;
         memset(&st, 0, sizeof(st));
         st.st_ino = de->d_ino;
         st.st_mode = de->d_type << 12;
-        if (filler(buf, de->d_name, &st, 0, (fuse_fill_dir_flags)0))
+        if (filler(buf, de->d_name, &st, 0, (fuse_fill_dir_flags) 0))
             break;
     }
 
@@ -180,7 +181,7 @@ int DriveServerAgent::Create(const char *path, mode_t mode, struct fuse_file_inf
     return 0;
 }
 
-DriveServerAgent::DriveServerAgent(const char* address, int port) {
+DriveServerAgent::DriveServerAgent(const char *address, int port) {
     networkAgent = new NetworkAgent();
     networkAgent->listenAsync(address, port, []() {
         std::cout << "Got connection\n";
@@ -193,7 +194,7 @@ DriveServerAgent::~DriveServerAgent() {
 
 int DriveServerAgent::Mkdir(const char *path, mode_t mode) {
     int res;
-    CONVERT_PATH(real_path,path)
+    CONVERT_PATH(real_path, path)
 
     res = mkdir(real_path, mode);
     if (res == -1)
@@ -205,7 +206,7 @@ int DriveServerAgent::Mkdir(const char *path, mode_t mode) {
 
 int DriveServerAgent::Rmdir(const char *path) {
     int res;
-    CONVERT_PATH(real_path,path)
+    CONVERT_PATH(real_path, path)
 
     res = rmdir(real_path);
     if (res == -1)
@@ -217,8 +218,8 @@ int DriveServerAgent::Rmdir(const char *path) {
 
 int DriveServerAgent::Symlink(const char *from, const char *to) {
     int res;
-    CONVERT_PATH(real_from,from)
-    CONVERT_PATH(real_to,to)
+    CONVERT_PATH(real_from, from)
+    CONVERT_PATH(real_to, to)
 
     res = symlink(real_from, real_to);
     if (res == -1)
@@ -229,7 +230,7 @@ int DriveServerAgent::Symlink(const char *from, const char *to) {
 }
 
 int DriveServerAgent::Chmod(const char *path, mode_t mode, struct fuse_file_info *fi) {
-    (void)fi;
+    (void) fi;
     int res;
     CONVERT_PATH(real_path, path);
 
@@ -242,7 +243,7 @@ int DriveServerAgent::Chmod(const char *path, mode_t mode, struct fuse_file_info
 }
 
 int DriveServerAgent::Chown(const char *path, uid_t uid, gid_t gid, struct fuse_file_info *fi) {
-    (void)fi;
+    (void) fi;
     int res;
     CONVERT_PATH(real_path, path);
     res = lchown(real_path, uid, gid);
@@ -255,13 +256,33 @@ int DriveServerAgent::Chown(const char *path, uid_t uid, gid_t gid, struct fuse_
 
 int DriveServerAgent::Readlink(const char *path, char *buf, size_t size) {
     int res;
-    CONVERT_PATH(real_path,path)
+    CONVERT_PATH(real_path, path)
 
     res = readlink(real_path, buf, size - 1);
     if (res == -1)
         return -errno;
 
     buf[res] = '\0';
+    return 0;
+}
+
+int DriveServerAgent::broadcastChanges(enum Message msg, std::vector<std::string> detail) {
+    switch (msg) {
+        // TODO: complete code
+        case NONE:
+            break;
+        case WRITE_DONE:
+            assert(detail.size() == 1);
+            networkAgent->sendMessageToAll(msg, detail);
+            break;
+        case RENAME:
+            break;
+        default:
+            std::cout << "Message not supported\n";
+            break;
+    }
+
+
     return 0;
 }
 

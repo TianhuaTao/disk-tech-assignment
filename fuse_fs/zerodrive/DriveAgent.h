@@ -1,6 +1,8 @@
 #pragma once
 #include <fuse.h>
-
+#include <vector>
+#include <string>
+#include "Protocol.h"
 class NetworkAgent;
 
 class DriveAgent {
@@ -74,7 +76,7 @@ public:
     int Read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi) override;
 
 private:
-    int broadcastChanges();
+    int broadcastChanges(enum Message msg, std::vector<std::string> detail);
 };
 
 class DriveClientAgent : public DriveAgent {

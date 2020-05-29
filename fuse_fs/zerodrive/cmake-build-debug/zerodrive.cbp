@@ -92,6 +92,15 @@
 		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/DriveAgent.h">
 			<Option target="zerodrive"/>
 		</Unit>
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/NetworkAgent.cpp">
+			<Option target="zerodrive"/>
+		</Unit>
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/NetworkAgent.h">
+			<Option target="zerodrive"/>
+		</Unit>
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/Protocol.h">
+			<Option target="zerodrive"/>
+		</Unit>
 		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/op.cpp">
 			<Option target="zerodrive"/>
 		</Unit>
