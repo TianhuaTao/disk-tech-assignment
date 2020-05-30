@@ -13,6 +13,7 @@
 #include <pwd.h>
 #include "DriveAgent.h"
 
+extern const char* global_prefix;
 
 const char *get_homedir() {
     static int initialized = 0;
@@ -31,7 +32,7 @@ const char *get_data_dir() {
     if (!initialized) {
         memset(datadir, 0, sizeof datadir);
         strcat(datadir, get_homedir());
-        strcat(datadir, "/zerodrive_internal");
+        strcat(datadir, global_prefix);
         initialized = 1;
     }
     return datadir;

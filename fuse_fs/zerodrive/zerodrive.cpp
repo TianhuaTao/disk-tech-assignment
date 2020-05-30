@@ -112,7 +112,10 @@ static struct options
     int client;
     int port;
     const char *address;
+    const char *prefix;
 } options;
+
+const char* global_prefix;
 
 void server_init()
 {
@@ -123,7 +126,6 @@ void server_init()
 void client_init()
 {
     localAgent = new DriveClientAgent(options.address, options.port);
-
     printf("Client init complete\n");
 }
 
@@ -147,6 +149,7 @@ static const struct fuse_opt option_spec[] = {
     OPTION("--server", server),
     OPTION("--client", client),
     OPTION("--address=%s", address),
+    OPTION("--prefix=%s", prefix),
     OPTION("-h", show_help),
     OPTION("--help", show_help),
     FUSE_OPT_END};
@@ -180,6 +183,12 @@ int main(int argc, char *argv[])
         args.argv[0][0] = '\0';
     }
 
+    if(options.prefix){
+        global_prefix= strdup((std::string("/")+ options.prefix).c_str());
+    }else{
+        global_prefix= strdup("/zerodrive_internal");
+    }
+    printf("The prefix is %s\n", global_prefix);
     if (options.server && options.client)
     {
         printf("Cannot be server and client at the same time\n");
@@ -206,8 +215,9 @@ int main(int argc, char *argv[])
         }
         client_init();
     }
-
     ret = fuse_main(args.argc, args.argv, &sync_oper, NULL);
     fuse_opt_free_args(&args);
+    printf("Return\n");
+
     return ret;
 }

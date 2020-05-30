@@ -183,9 +183,12 @@ int DriveServerAgent::Create(const char *path, mode_t mode, struct fuse_file_inf
 
 DriveServerAgent::DriveServerAgent(const char *address, int port) {
     networkAgent = new NetworkAgent();
+    networkAgent->setRole(NetworkAgent::SERVER);
     networkAgent->listenAsync(address, port, []() {
         std::cout << "Got connection\n";
     });
+    printf("NetworkAgent init complete\n");
+
 }
 
 DriveServerAgent::~DriveServerAgent() {
@@ -287,6 +290,13 @@ int DriveServerAgent::broadcastChanges(enum Message msg, std::vector<std::string
 }
 
 DriveClientAgent::DriveClientAgent(const char *address, int port) {
+    networkAgent= new NetworkAgent();
+    networkAgent->setRole(NetworkAgent::CLIENT);
+    networkAgent->connectAsync(address, port, []() {
+        std::cout << "Callback: Got connection\n";
+    });
+
+    printf("NetworkAgent init complete\n");
     // TODO: connect to server
 }
 
