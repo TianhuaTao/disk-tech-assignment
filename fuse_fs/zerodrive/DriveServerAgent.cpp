@@ -146,8 +146,7 @@ int DriveServerAgent::Open(const char *path, struct fuse_file_info *fi) {
     return 0;
 }
 
-int
-DriveServerAgent::Readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offset, struct fuse_file_info *fi,
+int DriveServerAgent::Readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offset, struct fuse_file_info *fi,
                           enum fuse_readdir_flags flags) {
     DIR *dp;
     struct dirent *de;
