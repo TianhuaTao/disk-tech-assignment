@@ -11,6 +11,8 @@ add_executable(zerodrive
         DriveAgent.h
         DriveClientAgent.cpp
         DriveClientAgent.h
+        DriveServerAgent.cpp
+        DriveServerAgent.h
         op.cpp
         op.h
         zerodrive.cpp

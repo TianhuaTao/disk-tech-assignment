@@ -83,6 +83,7 @@ int DriveServerAgent::Getattr(const char *path, struct stat *stbuf, struct fuse_
     if (res == -1)
         return -errno;
 
+    //TODO: send signal to client
     return 0;
 }
 
@@ -140,6 +141,8 @@ int DriveServerAgent::Open(const char *path, struct fuse_file_info *fi) {
         return -errno;
 
     fi->fh = res;
+
+    //TODO: send signal to client
     return 0;
 }
 
