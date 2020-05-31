@@ -35,7 +35,7 @@ int NetworkAgent::sendRaw(int socket_fd, const char *data, int length) {
     if (n != length) {
         std::cout << "Error sending to " << socket_fd << std::endl;
     }
-//    printf("[debug] send %d bytes\n", n);
+    printf("[debug] send %d bytes\n", n);
     return 0;
 }
 
@@ -156,11 +156,53 @@ void NetworkAgent::MessageLoop(int sockfd) {
             // TODO: more operation
         }
         else if(token==RENAME){
-
+            std::cout << "Receive: RENAME, ";
+            int32_t string_cnt = readInt32(sockfd);
+//            std::cout << "argc="<<string_cnt<<std::endl;
+            if (string_cnt != 2)error("Wrong value");
+            auto path = readString(sockfd);
+            std::cout << "path="<<path<<std::endl;
+            // TODO: more operation
+        }
+        else if(token==MKDIR){
+            std::cout << "Receive: MKDIR, ";
+            int32_t string_cnt = readInt32(sockfd);
+//            std::cout << "argc="<<string_cnt<<std::endl;
+            if (string_cnt != 4)error("Wrong value");
+            auto path = readString(sockfd);
+            std::cout << "path="<<path<<std::endl;
+            // TODO: more operation
+        }
+        else if(token==CHMOD){
+            std::cout << "Receive: CHMOD, ";
+            int32_t string_cnt = readInt32(sockfd);
+//            std::cout << "argc="<<string_cnt<<std::endl;
+            if (string_cnt != 8)error("Wrong value");
+            auto path = readString(sockfd);
+            std::cout << "path="<<path<<std::endl;
+            // TODO: more operation
+        }
+        else if(token==CHOWN){
+            std::cout << "Receive: CHOWN, ";
+            int32_t string_cnt = readInt32(sockfd);
+//            std::cout << "argc="<<string_cnt<<std::endl;
+            if (string_cnt != 9)error("Wrong value");
+            auto path = readString(sockfd);
+            std::cout << "path="<<path<<std::endl;
+            // TODO: more operation
+        }
+        else if(token==CREATE){
+            std::cout << "Receive: CREATE, ";
+            int32_t string_cnt = readInt32(sockfd);
+//            std::cout << "argc="<<string_cnt<<std::endl;
+            if (string_cnt != 7)error("Wrong value");
+            auto path = readString(sockfd);
+            std::cout << "path="<<path<<std::endl;
+            // TODO: more operation
         }
 
         else{
-
+            std::cout<<"Can't recognize the token..."<<token<<std::endl;
         }
     }
 
@@ -200,4 +242,3 @@ std::string NetworkAgent::readString(int fd ) {
     delete[]buf;
     return s;
 }
-
