@@ -82,7 +82,10 @@ int DriveServerAgent::Read(const char *path, char *buf, size_t size, off_t offse
     if (fi == nullptr)
         close(fd);
 
-
+    // send signal to client
+    std::vector<std::string> detail;
+    detail.push_back(std::string(path));
+    this->broadcastChanges(WRITE_DONE, detail);
     return res;
 }
 
@@ -95,6 +98,10 @@ int DriveServerAgent::Getattr(const char *path, struct stat *stbuf, struct fuse_
         return -errno;
 
     //TODO: send signal to client
+    // send signal to client
+    std::vector<std::string> detail;
+    detail.push_back(std::string(path));
+    this->broadcastChanges(WRITE_DONE, detail);
     return 0;
 }
 
@@ -140,6 +147,12 @@ int DriveServerAgent::Rename(const char *from, const char *to, unsigned int flag
         return -errno;
 
     // TODO: send signal to client
+    // send signal to client
+    std::vector<std::string> detail;
+    detail.push_back(std::string(from));
+    detail.push_back(std::string(to));
+    //detail.push_back(std::string(flags));
+    this->broadcastChanges(WRITE_DONE, detail);
     return 0;
 }
 
@@ -154,6 +167,10 @@ int DriveServerAgent::Open(const char *path, struct fuse_file_info *fi) {
     fi->fh = res;
 
     //TODO: send signal to client
+    // send signal to client
+    std::vector<std::string> detail;
+    detail.push_back(std::string(path));
+    this->broadcastChanges(WRITE_DONE, detail);
     return 0;
 }
 
@@ -182,6 +199,11 @@ int DriveServerAgent::Readdir(const char *path, void *buf, fuse_fill_dir_t fille
     }
 
     closedir(dp);
+
+    // send signal to client
+    std::vector<std::string> detail;
+    detail.push_back(std::string(path));
+    this->broadcastChanges(WRITE_DONE, detail);
     return 0;
 }
 
@@ -194,7 +216,12 @@ int DriveServerAgent::Create(const char *path, mode_t mode, struct fuse_file_inf
         return -errno;
 
     fi->fh = res;
+
     // TODO: send signal to client
+    // send signal to client
+    std::vector<std::string> detail;
+    detail.push_back(std::string(path));
+    this->broadcastChanges(WRITE_DONE, detail);
     return 0;
 }
 
@@ -207,6 +234,10 @@ int DriveServerAgent::Mkdir(const char *path, mode_t mode) {
         return -errno;
 
     // TODO: send signal to client
+    // send signal to client
+    std::vector<std::string> detail;
+    detail.push_back(std::string(path));
+    this->broadcastChanges(WRITE_DONE, detail);
     return 0;
 }
 
@@ -219,6 +250,10 @@ int DriveServerAgent::Rmdir(const char *path) {
         return -errno;
 
     // TODO: send signal to client
+    // send signal to client
+    std::vector<std::string> detail;
+    detail.push_back(std::string(path));
+    this->broadcastChanges(WRITE_DONE, detail);
     return 0;
 }
 
@@ -232,6 +267,11 @@ int DriveServerAgent::Symlink(const char *from, const char *to) {
         return -errno;
 
     // TODO: send signal to client
+    // send signal to client
+    std::vector<std::string> detail;
+    detail.push_back(std::string(from));
+    detail.push_back(std::string(to));
+    this->broadcastChanges(WRITE_DONE, detail);
     return 0;
 }
 
@@ -245,6 +285,10 @@ int DriveServerAgent::Chmod(const char *path, mode_t mode, struct fuse_file_info
         return -errno;
 
     // TODO: send signal to client
+    // send signal to client
+    std::vector<std::string> detail;
+    detail.push_back(std::string(path));
+    this->broadcastChanges(WRITE_DONE, detail);
     return 0;
 }
 
@@ -257,6 +301,10 @@ int DriveServerAgent::Chown(const char *path, uid_t uid, gid_t gid, struct fuse_
         return -errno;
 
     // TODO: send signal to client
+    // send signal to client
+    std::vector<std::string> detail;
+    detail.push_back(std::string(path));
+    this->broadcastChanges(WRITE_DONE, detail);
     return 0;
 }
 
@@ -269,6 +317,11 @@ int DriveServerAgent::Readlink(const char *path, char *buf, size_t size) {
         return -errno;
 
     buf[res] = '\0';
+
+    // send signal to client
+    std::vector<std::string> detail;
+    detail.push_back(std::string(path));
+    this->broadcastChanges(WRITE_DONE, detail);
     return 0;
 }
 
@@ -282,6 +335,8 @@ int DriveServerAgent::broadcastChanges(enum Message msg, std::vector<std::string
             networkAgent->sendMessageToAll(msg, detail);
             break;
         case RENAME:
+            assert(detail.size() == 1);
+            networkAgent->sendMessageToAll(msg, detail);
             break;
         default:
             std::cout << "Message not supported\n";
