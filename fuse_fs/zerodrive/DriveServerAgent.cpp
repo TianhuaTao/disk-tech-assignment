@@ -100,7 +100,6 @@ int DriveServerAgent::Write(const char *path, const char *buf, size_t size,
 }
 
 int DriveServerAgent::Rename(const char *from, const char *to, unsigned int flags) {
-    // TODO: send signal to client
     // send signal to client
     std::vector<std::string> detail;
     detail.push_back(std::string(from));
@@ -113,10 +112,6 @@ int DriveServerAgent::Open(const char *path, struct fuse_file_info *fi) {
     return fileOperation->Open(path,fi);
 
     //TODO: send signal to client
-    // send signal to client
-    //std::vector<std::string> detail;
-    //detail.push_back(std::string(path));
-    //this->broadcastChanges(WRITE_DONE, detail);
 }
 
 int DriveServerAgent::Readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offset, struct fuse_file_info *fi,
@@ -124,9 +119,6 @@ int DriveServerAgent::Readdir(const char *path, void *buf, fuse_fill_dir_t fille
     return fileOperation->Readdir(path,buf,filler, offset,fi,flags);
 
     //TODO: before I read the directory, I should keep the info updated
-    //std::vector<std::string> detail;
-    //detail.push_back(std::string(path));
-    //this->broadcastChanges(WRITE_DONE, detail);
 }
 
 int DriveServerAgent::Create(const char *path, mode_t mode, struct fuse_file_info *fi) {
@@ -202,44 +194,13 @@ int DriveServerAgent::Readlink(const char *path, char *buf, size_t size) {
 }
 
 int DriveServerAgent::broadcastChanges(enum Message msg, std::vector<std::string> detail) {
-    switch (msg) {
-        // TODO: complete code
-        case NONE:
-            break;
-        case WRITE_DONE:
-            assert(detail.size() == 1);
-            networkAgent->sendMessageToAll(msg, detail);
-            break;
-        case RENAME:
-            assert(detail.size() == 2);
-            networkAgent->sendMessageToAll(msg, detail);
-            break;
-        case CREATE:
-            assert(detail.size() == 2);
-            networkAgent->sendMessageToAll(msg, detail);
-            break;
-        case MKDIR:
-            assert(detail.size() == 2);
-            networkAgent->sendMessageToAll(msg, detail);
-            break;
-        case RMDIR:
-            assert(detail.size() == 1);
-            networkAgent->sendMessageToAll(msg, detail);
-            break;
-        case CHMOD:
-            assert(detail.size() == 2);
-            networkAgent->sendMessageToAll(msg, detail);
-            break;
-        case CHOWN:
-            assert(detail.size() == 3);
-            networkAgent->sendMessageToAll(msg, detail);
-            break;
-        default:
-            std::cout << "Message not supported\n";
-            break;
+    if(msg>0&&msg<10){
+        assert(detail.size() == Message_Number[msg]);
+        networkAgent->sendMessageToAll(msg, detail);
+    }else
+    {
+        std::cout << "Message not supported\n";
     }
-
-
     return 0;
 }
 

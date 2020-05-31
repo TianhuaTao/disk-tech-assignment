@@ -35,4 +35,7 @@ public:
 
     void *Init(struct fuse_conn_info *conn,
                struct fuse_config *cfg) override;
+
+private:
+    int broadcastChanges(enum Message msg, std::vector<std::string> detail);
 };
