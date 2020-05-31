@@ -20,7 +20,7 @@
 
 DriveClientAgent::DriveClientAgent(const char *address, int port) {
     networkAgent = new NetworkAgent();
-    networkAgent->setRole(NetworkAgent::SERVER);
+    networkAgent->setRole(NetworkAgent::CLIENT);
     networkAgent->listenAsync(address, port, []() {
         std::cout << "Got connection\n";
     });
@@ -36,36 +36,6 @@ DriveClientAgent::~DriveClientAgent() {
 
 void *DriveClientAgent::Init(struct fuse_conn_info *conn, struct fuse_config *cfg) {
     return fileOperation->Init(conn,cfg);
-
-    /*
-    (void) conn;
-    cfg->use_ino = 1;
-
-    /// Pick up changes from lower filesystem right away. This is
-	   also necessary for better hardlink support. When the kernel
-	   calls the unlink() handler, it does not know the inode of
-	   the to-be-removed entry and can therefore not invalidate
-	   the cache of the associated inode - resulting in an
-	   incorrect st_nlink value being reported for any remaining
-	   hardlinks to this inode. //
-    cfg->entry_timeout = 0;
-    cfg->attr_timeout = 0;
-    cfg->negative_timeout = 0;
-
-    printf("data path: %s\n", get_data_dir());
-
-    // TODO: check failure
-    if (mkdir(get_data_dir(), 0777) == -1) {
-        if (errno == EEXIST) {
-            // already exists
-            printf("found previous data\n");
-        } else {
-            printf("cannot create data folder\n");
-        }
-    }
-
-    return nullptr;
-    */
 }
 
 //-------------------init-------------------------------------------------------
