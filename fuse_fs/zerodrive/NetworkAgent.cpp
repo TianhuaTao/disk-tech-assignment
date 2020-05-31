@@ -153,12 +153,11 @@ void NetworkAgent::MessageLoop(int sockfd) {
         if (ret < 0) break;
         token = (Message) token_i;
 
-
         if (token==WRITE_DONE) {
             std::cout << "Receive: WRITE_DONE, ";
             int32_t string_cnt = readInt32(sockfd);
 //            std::cout << "argc="<<string_cnt<<std::endl;
-            if (string_cnt != 1)error("Wrong value");
+            if (string_cnt != Message_Number[token])error("Wrong value");
             auto path = readString(sockfd);
             std::cout << "path="<<path<<std::endl;
             // TODO: more operation
@@ -167,34 +166,40 @@ void NetworkAgent::MessageLoop(int sockfd) {
             std::cout << "Receive: RENAME, ";
             int32_t string_cnt = readInt32(sockfd);
 //            std::cout << "argc="<<string_cnt<<std::endl;
-            if (string_cnt != 2)error("Wrong value");
-            auto path = readString(sockfd);
-            std::cout << "path="<<path<<std::endl;
+            if (string_cnt != Message_Number[token])error("Wrong value");
+            auto from = readString(sockfd);
+            std::cout << "from="<<from<<std::endl;
+            auto to = readString(sockfd);
+            std::cerr << "to=" <<to<<std::endl;
             // TODO: more operation
         }
         else if(token==CREATE){
             std::cout << "Receive: CREATE, ";
             int32_t string_cnt = readInt32(sockfd);
 //            std::cout << "argc="<<string_cnt<<std::endl;
-            if (string_cnt != 2)error("Wrong value");
+            if (string_cnt != Message_Number[token])error("Wrong value");
             auto path = readString(sockfd);
             std::cout << "path="<<path<<std::endl;
+            auto mode = (mode_t)std::stoi(readString(sockfd));
+            std::cout << "mode=" <<mode<<std::endl;
             // TODO: more operation
         }
         else if(token==MKDIR){
             std::cout << "Receive: MKDIR, ";
             int32_t string_cnt = readInt32(sockfd);
 //            std::cout << "argc="<<string_cnt<<std::endl;
-            if (string_cnt != 2)error("Wrong value");//mkdir has 2 messages
+            if (string_cnt != Message_Number[token])error("Wrong value");//mkdir has 2 messages
             auto path = readString(sockfd);
             std::cout << "path="<<path<<std::endl;
+            auto mode = (mode_t)std::stoi(readString(sockfd));
+            std::cout << "mode=" <<mode<<std::endl;
             // TODO: more operation
         }
         else if(token==RMDIR){
             std::cout << "Receive: RMDIR, ";
             int32_t string_cnt = readInt32(sockfd);
 //            std::cout << "argc="<<string_cnt<<std::endl;
-            if (string_cnt != 1)error("Wrong value");//mkdir has 2 messages
+            if (string_cnt != Message_Number[token])error("Wrong value");//mkdir has 2 messages
             auto path = readString(sockfd);
             std::cout << "path="<<path<<std::endl;
             // TODO: more operation
@@ -203,18 +208,24 @@ void NetworkAgent::MessageLoop(int sockfd) {
             std::cout << "Receive: CHMOD, ";
             int32_t string_cnt = readInt32(sockfd);
 //            std::cout << "argc="<<string_cnt<<std::endl;
-            if (string_cnt != 2)error("Wrong value");
+            if (string_cnt != Message_Number[token])error("Wrong value");
             auto path = readString(sockfd);
             std::cout << "path="<<path<<std::endl;
+            auto mode = (mode_t)std::stoi(readString(sockfd));
+            std::cout << "mode=" <<mode<<std::endl;
             // TODO: more operation
         }
         else if(token==CHOWN){
             std::cout << "Receive: CHOWN, ";
             int32_t string_cnt = readInt32(sockfd);
 //            std::cout << "argc="<<string_cnt<<std::endl;
-            if (string_cnt != 3)error("Wrong value");
+            if (string_cnt != Message_Number[token])error("Wrong value");
             auto path = readString(sockfd);
             std::cout << "path="<<path<<std::endl;
+            auto from = (mode_t)std::stoi(readString(sockfd));
+            std::cout << "mode=" <<from<<std::endl;
+            auto to = (mode_t)std::stoi(readString(sockfd));
+            std::cout << "mode=" <<to<<std::endl;
             // TODO: more operation
         }
         else{

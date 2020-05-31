@@ -37,7 +37,6 @@ DriveServerAgent::~DriveServerAgent() {
 
 void *DriveServerAgent::Init(struct fuse_conn_info *conn, struct fuse_config *cfg) {
     return fileOperation->Init(conn,cfg);
-
     /*
     (void) conn;
     cfg->use_ino = 1;
@@ -108,7 +107,6 @@ int DriveServerAgent::Rename(const char *from, const char *to, unsigned int flag
     detail.push_back(std::string(to));
     this->broadcastChanges(RENAME, detail);
     return fileOperation->Rename(from, to, flags);
-
 }
 
 int DriveServerAgent::Open(const char *path, struct fuse_file_info *fi) {

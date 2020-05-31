@@ -5,13 +5,12 @@ enum Message{
     WRITE_DONE,//1
     RENAME,//2
     MKDIR,//2
-    RMDIR,
+    RMDIR,//1
+    CREATE,//2
+    CHMOD,//2
+    CHOWN,//3
     REMOVE,
     CREATE_DIR,
-    CREATE,//2
-    CHMOD,
-    CHOWN,
-    
-    
 };
 
+extern int Message_Number[10];
