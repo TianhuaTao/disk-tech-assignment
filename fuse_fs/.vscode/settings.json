@@ -44,6 +44,11 @@
         "typeinfo": "cpp",
         "bit": "cpp",
         "cstring": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "chrono": "cpp",
+        "ctime": "cpp",
+        "set": "cpp",
+        "ratio": "cpp",
+        "thread": "cpp"
     }
 }

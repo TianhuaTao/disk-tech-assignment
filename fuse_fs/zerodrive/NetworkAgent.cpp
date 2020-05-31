@@ -35,7 +35,7 @@ int NetworkAgent::sendRaw(int socket_fd, const char *data, int length) {
     if (n != length) {
         std::cout << "Error sending to " << socket_fd << std::endl;
     }
-//    printf("[debug] send %d bytes\n", n);
+    printf("[debug] send %d bytes\n", n);
     return 0;
 }
 
@@ -53,6 +53,8 @@ int NetworkAgent::listenAsync(const char *address, int port, std::function<void(
     sa.sin_addr.s_addr = INADDR_ANY;
     sa.sin_port = htons(port);
 
+    std::cerr<<"[debug]NetworkAgent::listenAsync() port = "<<port<<" "<<sa.sin_port<<std::endl;
+
     // TODO: use thread pool to call listenSync
     listeningThread = new std::thread(&NetworkAgent::listenSync, this, sa, callback);
     return 0;
@@ -67,6 +69,12 @@ int NetworkAgent::listenSync(struct sockaddr_in server_addr, std::function<void(
         return 1;
     }
     if (bind(socket_fd, (struct sockaddr *) &server_addr, sizeof(server_addr)) < 0) {
+        std::cerr<<socket_fd<<" "
+            //<<server_addr.sin_addr<<" "
+            <<server_addr.sin_family<<" "
+            <<server_addr.sin_port<<" "
+            <<server_addr.sin_zero
+            <<std::endl;
         error("Cannot bind socket");
         return 1;
     }
@@ -156,11 +164,61 @@ void NetworkAgent::MessageLoop(int sockfd) {
             // TODO: more operation
         }
         else if(token==RENAME){
-
+            std::cout << "Receive: RENAME, ";
+            int32_t string_cnt = readInt32(sockfd);
+//            std::cout << "argc="<<string_cnt<<std::endl;
+            if (string_cnt != 2)error("Wrong value");
+            auto path = readString(sockfd);
+            std::cout << "path="<<path<<std::endl;
+            // TODO: more operation
         }
-
+        else if(token==CREATE){
+            std::cout << "Receive: CREATE, ";
+            int32_t string_cnt = readInt32(sockfd);
+//            std::cout << "argc="<<string_cnt<<std::endl;
+            if (string_cnt != 2)error("Wrong value");
+            auto path = readString(sockfd);
+            std::cout << "path="<<path<<std::endl;
+            // TODO: more operation
+        }
+        else if(token==MKDIR){
+            std::cout << "Receive: MKDIR, ";
+            int32_t string_cnt = readInt32(sockfd);
+//            std::cout << "argc="<<string_cnt<<std::endl;
+            if (string_cnt != 2)error("Wrong value");//mkdir has 2 messages
+            auto path = readString(sockfd);
+            std::cout << "path="<<path<<std::endl;
+            // TODO: more operation
+        }
+        else if(token==RMDIR){
+            std::cout << "Receive: RMDIR, ";
+            int32_t string_cnt = readInt32(sockfd);
+//            std::cout << "argc="<<string_cnt<<std::endl;
+            if (string_cnt != 1)error("Wrong value");//mkdir has 2 messages
+            auto path = readString(sockfd);
+            std::cout << "path="<<path<<std::endl;
+            // TODO: more operation
+        }
+        else if(token==CHMOD){
+            std::cout << "Receive: CHMOD, ";
+            int32_t string_cnt = readInt32(sockfd);
+//            std::cout << "argc="<<string_cnt<<std::endl;
+            if (string_cnt != 2)error("Wrong value");
+            auto path = readString(sockfd);
+            std::cout << "path="<<path<<std::endl;
+            // TODO: more operation
+        }
+        else if(token==CHOWN){
+            std::cout << "Receive: CHOWN, ";
+            int32_t string_cnt = readInt32(sockfd);
+//            std::cout << "argc="<<string_cnt<<std::endl;
+            if (string_cnt != 3)error("Wrong value");
+            auto path = readString(sockfd);
+            std::cout << "path="<<path<<std::endl;
+            // TODO: more operation
+        }
         else{
-
+            std::cout<<"Can't recognize the token..."<<token<<std::endl;
         }
     }
 
@@ -200,4 +258,3 @@ std::string NetworkAgent::readString(int fd ) {
     delete[]buf;
     return s;
 }
-

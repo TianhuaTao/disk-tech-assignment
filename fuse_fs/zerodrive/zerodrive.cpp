@@ -9,6 +9,8 @@
 #include <cassert>
 #include "zerodrive.h"
 #include "DriveAgent.h"
+#include "DriveServerAgent.h"
+#include "DriveClientAgent.h"
 
 
 DriveAgent* localAgent;
