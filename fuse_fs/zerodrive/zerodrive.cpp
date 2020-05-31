@@ -11,7 +11,7 @@
 #include "DriveAgent.h"
 #include "DriveServerAgent.h"
 #include "DriveClientAgent.h"
-
+#include "op.h"
 
 DriveAgent* localAgent;
 static const struct fuse_operations sync_oper = {
@@ -191,6 +191,8 @@ int main(int argc, char *argv[])
         global_prefix= strdup("/zerodrive_internal");
     }
     printf("The prefix is %s\n", global_prefix);
+    printf("The tmp dir is %s\n", get_tmp_dir());
+
     if (options.server && options.client)
     {
         printf("Cannot be server and client at the same time\n");

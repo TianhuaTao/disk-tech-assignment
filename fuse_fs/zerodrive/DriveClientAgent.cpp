@@ -19,7 +19,7 @@
 #include "DriveClientAgent.h"
 
 DriveClientAgent::DriveClientAgent(const char *address, int port) {
-    networkAgent = new NetworkAgent();
+    networkAgent = new NetworkAgent(this);
     networkAgent->setRole(NetworkAgent::CLIENT);
     networkAgent->connectAsync(address, port, []() {
         std::cout << "Got connection\n";
@@ -157,18 +157,25 @@ int DriveClientAgent::Chown(const char *path, uid_t uid, gid_t gid, struct fuse_
 int DriveClientAgent::Readlink(const char *path, char *buf, size_t size) {
     return fileOperation->Readlink(path, buf, size);
 
-    // send signal to client
-    //????????????but what will this operation do???
+
     return 0;
 }
 
 int DriveClientAgent::broadcastChanges(enum Message msg, std::vector<std::string> detail) {
     if(msg>0&&msg<10){
-        assert(detail.size() == Message_Number[msg]);
+        assert(detail.size() == (unsigned long) Message_Number[msg]);
         networkAgent->sendMessageToAll(msg, detail);
     }else
     {
         std::cout << "Message not supported\n";
     }
     return 0;
+}
+
+void DriveClientAgent::onMsgWriteDone(std::string path) {
+//    DriveAgent::onMsgWriteDone(path);
+
+    // TODO: use another thread
+    networkAgent->requestFile(path);    // terrible -- will take a long time
+
 }

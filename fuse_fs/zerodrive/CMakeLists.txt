@@ -17,4 +17,9 @@ add_executable(zerodrive
         op.h
         zerodrive.cpp
         zerodrive.h
-        Protocol.h NetworkAgent.cpp)
+        Protocol.h
+        Protocol.cpp
+        NetworkAgent.cpp
+        FileOperation.h
+        FileOperation.cpp
+        )

@@ -10,6 +10,8 @@ const char *get_homedir();
 
 const char *get_data_dir();
 
+const char *get_tmp_dir();
+
 #define CONVERT_PATH(newName, path) \
         char newName [512];\
         strcpy(newName, get_data_dir());\

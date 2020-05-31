@@ -4,6 +4,7 @@
 #include <string>
 #include "Protocol.h"
 #include "FileOperation.h"
+#include <queue>
 class NetworkAgent;
 
 class DriveAgent {
@@ -12,7 +13,7 @@ private:
 protected:
     NetworkAgent *networkAgent = nullptr;
     FileOperation *fileOperation = nullptr;
-
+    std::queue<std::string> overdueFiles;   // files that need to be updated
 public:
     DriveAgent() = default;
     virtual ~DriveAgent() = default;
@@ -41,4 +42,15 @@ public:
     virtual int Chown(const char *path, uid_t uid, gid_t gid,struct fuse_file_info *fi) = 0;
 
     virtual int Symlink(const char *from, const char *to) = 0;
+
+    // handles message, default do nothing
+    // child class should override these
+    virtual void onMsgWriteDone(std::string path) {};
+    virtual void onMsgCreate(std::string path, mode_t mode){};
+    virtual void onMsgMkdir(std::string path, mode_t mode){};
+    virtual void onMsgRename(std::string from, std::string to){};
+    virtual void onMsgRmdir(std::string path) {};
+    virtual void onMsgChmod(std::string path, mode_t mode){};
+
+
 };

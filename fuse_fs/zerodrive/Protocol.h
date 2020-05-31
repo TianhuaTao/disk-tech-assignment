@@ -11,6 +11,7 @@ enum Message{
     CHOWN,//3
     REMOVE,
     CREATE_DIR,
+    REQUEST_FILE, // 1
 };
 
-extern int Message_Number[10];
+extern int Message_Number[11];

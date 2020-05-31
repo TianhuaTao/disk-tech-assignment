@@ -1,6 +1,10 @@
 file(REMOVE_RECURSE
   "CMakeFiles/zerodrive.dir/DriveAgent.cpp.o"
+  "CMakeFiles/zerodrive.dir/DriveClientAgent.cpp.o"
+  "CMakeFiles/zerodrive.dir/DriveServerAgent.cpp.o"
+  "CMakeFiles/zerodrive.dir/FileOperation.cpp.o"
   "CMakeFiles/zerodrive.dir/NetworkAgent.cpp.o"
+  "CMakeFiles/zerodrive.dir/Protocol.cpp.o"
   "CMakeFiles/zerodrive.dir/op.cpp.o"
   "CMakeFiles/zerodrive.dir/zerodrive.cpp.o"
   "zerodrive"

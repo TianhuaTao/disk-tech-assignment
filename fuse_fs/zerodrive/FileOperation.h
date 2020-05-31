@@ -35,4 +35,8 @@ public:
     virtual int Chown(const char *path, uid_t uid, gid_t gid,struct fuse_file_info *fi);
 
     virtual int Symlink(const char *from, const char *to);
+
+    bool checkExist(const char* path);
+    bool checkExistReal(const char* realpath);
+
 };

@@ -291,3 +291,14 @@ int FileOperation::Readlink(const char *path, char *buf, size_t size) {
     buf[res] = '\0';
     return 0;
 }
+
+bool FileOperation::checkExist(const char *path) {
+    CONVERT_PATH(realpath,path)
+    return checkExistReal(realpath);
+}
+
+// check if a file exists
+bool FileOperation::checkExistReal(const char *realpath) {
+    struct stat buffer{};
+    return (stat(realpath, &buffer)==0);
+}

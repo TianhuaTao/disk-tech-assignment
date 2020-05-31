@@ -92,10 +92,31 @@
 		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/DriveAgent.h">
 			<Option target="zerodrive"/>
 		</Unit>
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/DriveClientAgent.cpp">
+			<Option target="zerodrive"/>
+		</Unit>
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/DriveClientAgent.h">
+			<Option target="zerodrive"/>
+		</Unit>
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/DriveServerAgent.cpp">
+			<Option target="zerodrive"/>
+		</Unit>
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/DriveServerAgent.h">
+			<Option target="zerodrive"/>
+		</Unit>
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/FileOperation.cpp">
+			<Option target="zerodrive"/>
+		</Unit>
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/FileOperation.h">
+			<Option target="zerodrive"/>
+		</Unit>
 		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/NetworkAgent.cpp">
 			<Option target="zerodrive"/>
 		</Unit>
 		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/NetworkAgent.h">
+			<Option target="zerodrive"/>
+		</Unit>
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/Protocol.cpp">
 			<Option target="zerodrive"/>
 		</Unit>
 		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/Protocol.h">

@@ -150,6 +150,87 @@ DriveAgent.cpp.s:
 	$(MAKE) -f CMakeFiles/zerodrive.dir/build.make CMakeFiles/zerodrive.dir/DriveAgent.cpp.s
 .PHONY : DriveAgent.cpp.s
 
+DriveClientAgent.o: DriveClientAgent.cpp.o
+
+.PHONY : DriveClientAgent.o
+
+# target to build an object file
+DriveClientAgent.cpp.o:
+	$(MAKE) -f CMakeFiles/zerodrive.dir/build.make CMakeFiles/zerodrive.dir/DriveClientAgent.cpp.o
+.PHONY : DriveClientAgent.cpp.o
+
+DriveClientAgent.i: DriveClientAgent.cpp.i
+
+.PHONY : DriveClientAgent.i
+
+# target to preprocess a source file
+DriveClientAgent.cpp.i:
+	$(MAKE) -f CMakeFiles/zerodrive.dir/build.make CMakeFiles/zerodrive.dir/DriveClientAgent.cpp.i
+.PHONY : DriveClientAgent.cpp.i
+
+DriveClientAgent.s: DriveClientAgent.cpp.s
+
+.PHONY : DriveClientAgent.s
+
+# target to generate assembly for a file
+DriveClientAgent.cpp.s:
+	$(MAKE) -f CMakeFiles/zerodrive.dir/build.make CMakeFiles/zerodrive.dir/DriveClientAgent.cpp.s
+.PHONY : DriveClientAgent.cpp.s
+
+DriveServerAgent.o: DriveServerAgent.cpp.o
+
+.PHONY : DriveServerAgent.o
+
+# target to build an object file
+DriveServerAgent.cpp.o:
+	$(MAKE) -f CMakeFiles/zerodrive.dir/build.make CMakeFiles/zerodrive.dir/DriveServerAgent.cpp.o
+.PHONY : DriveServerAgent.cpp.o
+
+DriveServerAgent.i: DriveServerAgent.cpp.i
+
+.PHONY : DriveServerAgent.i
+
+# target to preprocess a source file
+DriveServerAgent.cpp.i:
+	$(MAKE) -f CMakeFiles/zerodrive.dir/build.make CMakeFiles/zerodrive.dir/DriveServerAgent.cpp.i
+.PHONY : DriveServerAgent.cpp.i
+
+DriveServerAgent.s: DriveServerAgent.cpp.s
+
+.PHONY : DriveServerAgent.s
+
+# target to generate assembly for a file
+DriveServerAgent.cpp.s:
+	$(MAKE) -f CMakeFiles/zerodrive.dir/build.make CMakeFiles/zerodrive.dir/DriveServerAgent.cpp.s
+.PHONY : DriveServerAgent.cpp.s
+
+FileOperation.o: FileOperation.cpp.o
+
+.PHONY : FileOperation.o
+
+# target to build an object file
+FileOperation.cpp.o:
+	$(MAKE) -f CMakeFiles/zerodrive.dir/build.make CMakeFiles/zerodrive.dir/FileOperation.cpp.o
+.PHONY : FileOperation.cpp.o
+
+FileOperation.i: FileOperation.cpp.i
+
+.PHONY : FileOperation.i
+
+# target to preprocess a source file
+FileOperation.cpp.i:
+	$(MAKE) -f CMakeFiles/zerodrive.dir/build.make CMakeFiles/zerodrive.dir/FileOperation.cpp.i
+.PHONY : FileOperation.cpp.i
+
+FileOperation.s: FileOperation.cpp.s
+
+.PHONY : FileOperation.s
+
+# target to generate assembly for a file
+FileOperation.cpp.s:
+	$(MAKE) -f CMakeFiles/zerodrive.dir/build.make CMakeFiles/zerodrive.dir/FileOperation.cpp.s
+.PHONY : FileOperation.cpp.s
+
 NetworkAgent.o: NetworkAgent.cpp.o
 
 .PHONY : NetworkAgent.o
@@ -176,6 +257,33 @@ NetworkAgent.s: NetworkAgent.cpp.s
 NetworkAgent.cpp.s:
 	$(MAKE) -f CMakeFiles/zerodrive.dir/build.make CMakeFiles/zerodrive.dir/NetworkAgent.cpp.s
 .PHONY : NetworkAgent.cpp.s
+
+Protocol.o: Protocol.cpp.o
+
+.PHONY : Protocol.o
+
+# target to build an object file
+Protocol.cpp.o:
+	$(MAKE) -f CMakeFiles/zerodrive.dir/build.make CMakeFiles/zerodrive.dir/Protocol.cpp.o
+.PHONY : Protocol.cpp.o
+
+Protocol.i: Protocol.cpp.i
+
+.PHONY : Protocol.i
+
+# target to preprocess a source file
+Protocol.cpp.i:
+	$(MAKE) -f CMakeFiles/zerodrive.dir/build.make CMakeFiles/zerodrive.dir/Protocol.cpp.i
+.PHONY : Protocol.cpp.i
+
+Protocol.s: Protocol.cpp.s
+
+.PHONY : Protocol.s
+
+# target to generate assembly for a file
+Protocol.cpp.s:
+	$(MAKE) -f CMakeFiles/zerodrive.dir/build.make CMakeFiles/zerodrive.dir/Protocol.cpp.s
+.PHONY : Protocol.cpp.s
 
 op.o: op.cpp.o
 
@@ -243,9 +351,21 @@ help:
 	@echo "... DriveAgent.o"
 	@echo "... DriveAgent.i"
 	@echo "... DriveAgent.s"
+	@echo "... DriveClientAgent.o"
+	@echo "... DriveClientAgent.i"
+	@echo "... DriveClientAgent.s"
+	@echo "... DriveServerAgent.o"
+	@echo "... DriveServerAgent.i"
+	@echo "... DriveServerAgent.s"
+	@echo "... FileOperation.o"
+	@echo "... FileOperation.i"
+	@echo "... FileOperation.s"
 	@echo "... NetworkAgent.o"
 	@echo "... NetworkAgent.i"
 	@echo "... NetworkAgent.s"
+	@echo "... Protocol.o"
+	@echo "... Protocol.i"
+	@echo "... Protocol.s"
 	@echo "... op.o"
 	@echo "... op.i"
 	@echo "... op.s"

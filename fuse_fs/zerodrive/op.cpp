@@ -38,6 +38,19 @@ const char *get_data_dir() {
     return datadir;
 }
 
+const char *get_tmp_dir() {
+    static int initialized = 0;
+    static char tmpdir[512];
+    if (!initialized) {
+        memset(tmpdir, 0, sizeof tmpdir);
+        strcat(tmpdir, "/tmp");
+        strcat(tmpdir, global_prefix);
+        initialized = 1;
+    }
+    return tmpdir;
+}
+
+
 /** Get file attributes.
  *
  * Similar to stat().  The 'st_dev' and 'st_blksize' fields are

@@ -1,6 +1,7 @@
 //
 // Created by sam on 2020/5/30.
 //
+#define FUSE_USE_VERSION 31
 #include "Protocol.h"
 #include "NetworkAgent.h"
 #include <sys/socket.h>
@@ -11,6 +12,11 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <thread>
+#include <cstring>
+#include <unistd.h>
+#include <cstdio>
+#include "DriveAgent.h"
+#include "op.h"
 
 bool NetworkAgent::isConnected() {
     return !connections.empty();
@@ -95,7 +101,7 @@ int NetworkAgent::listenSync(struct sockaddr_in server_addr, std::function<void(
     return 0;
 }
 
-NetworkAgent::NetworkAgent() {
+NetworkAgent::NetworkAgent(DriveAgent* host) :hostDriveAgent(host){
     printf("New NetworkAgent...\n");
 }
 
@@ -128,7 +134,7 @@ int NetworkAgent::connectSync(struct sockaddr_in server_addr, std::function<void
         return 1;
     }
     printf("Made connection\n");
-
+    this->_server_addr = server_addr;
     connections.insert(socket_fd);
     callback();
     MessageLoop(socket_fd);
@@ -161,7 +167,8 @@ void NetworkAgent::MessageLoop(int sockfd) {
             if (string_cnt != Message_Number[token])error("Wrong value");
             auto path = readString(sockfd);
             std::cout << "path="<<path<<std::endl;
-            // TODO: more operation
+
+            hostDriveAgent->onMsgWriteDone(path);
         }
         else if(token==RENAME){
             std::cout << "Receive: RENAME, ";
@@ -172,7 +179,9 @@ void NetworkAgent::MessageLoop(int sockfd) {
             std::cout << "from="<<from<<std::endl;
             auto to = readString(sockfd);
             std::cerr << "to=" <<to<<std::endl;
-            // TODO: more operation
+
+            hostDriveAgent->onMsgRename(from,to);
+
         }
         else if(token==CREATE){
             std::cout << "Receive: CREATE, ";
@@ -183,7 +192,9 @@ void NetworkAgent::MessageLoop(int sockfd) {
             std::cout << "path="<<path<<std::endl;
             auto mode = (mode_t)std::stoi(readString(sockfd));
             std::cout << "mode=" <<mode<<std::endl;
-            // TODO: more operation
+
+            hostDriveAgent->onMsgCreate(path, mode);
+
         }
         else if(token==MKDIR){
             std::cout << "Receive: MKDIR, ";
@@ -194,16 +205,19 @@ void NetworkAgent::MessageLoop(int sockfd) {
             std::cout << "path="<<path<<std::endl;
             auto mode = (mode_t)std::stoi(readString(sockfd));
             std::cout << "mode=" <<mode<<std::endl;
-            // TODO: more operation
+
+            hostDriveAgent->onMsgMkdir(path, mode);
         }
         else if(token==RMDIR){
             std::cout << "Receive: RMDIR, ";
             int32_t string_cnt = readInt32(sockfd);
 //            std::cout << "argc="<<string_cnt<<std::endl;
-            if (string_cnt != Message_Number[token])error("Wrong value");//mkdir has 2 messages
+            if (string_cnt != Message_Number[token])error("Wrong value");//rmdir has 1 messages
             auto path = readString(sockfd);
             std::cout << "path="<<path<<std::endl;
             // TODO: more operation
+            hostDriveAgent->onMsgRmdir(path);
+
         }
         else if(token==CHMOD){
             std::cout << "Receive: CHMOD, ";
@@ -215,6 +229,8 @@ void NetworkAgent::MessageLoop(int sockfd) {
             auto mode = (mode_t)std::stoi(readString(sockfd));
             std::cout << "mode=" <<mode<<std::endl;
             // TODO: more operation
+            hostDriveAgent->onMsgChmod(path, mode);
+
         }
         else if(token==CHOWN){
             std::cout << "Receive: CHOWN, ";
@@ -228,6 +244,14 @@ void NetworkAgent::MessageLoop(int sockfd) {
             auto to = (mode_t)std::stoi(readString(sockfd));
             std::cout << "mode=" <<to<<std::endl;
             // TODO: more operation
+        }
+        else if(token==REQUEST_FILE){
+            std::cout << "Receive: REQUEST_FILE, ";
+            int32_t string_cnt = readInt32(sockfd);
+            if (string_cnt != Message_Number[token])error("Wrong value");
+            auto path = readString(sockfd);
+            std::cout << "path="<<path<<std::endl;
+            sendRequestedFile(path);
         }
         else{
             std::cout<<"Can't recognize the token..."<<token<<std::endl;
@@ -269,4 +293,85 @@ std::string NetworkAgent::readString(int fd ) {
     std::string s(buf);
     delete[]buf;
     return s;
+}
+
+int NetworkAgent::disconnect() {
+    printf("NetworkAgent::disconnect() is not implemented\n" );
+    return 0;
+}
+
+// request a file from server
+// first store the file in tmp dir
+// then move it the target location
+int NetworkAgent::requestFile(std::string path) {
+    if(role==SERVER)error("server should not request file");
+    if(connections.empty()){return -1;}
+    int server_fd = *connections.begin();
+    std::vector<std::string> detail;
+    detail.push_back(path);
+    sendMessage(server_fd, REQUEST_FILE, detail);
+
+    int new_port = readInt32(server_fd);  // server will give a new socket port to transfer file
+    if(new_port<0){
+        error("Server cannot provide the requested file "+ path);
+        return -1;
+    }
+    //TODO: consider using a new thread
+
+
+    // connect to the new port
+    struct sockaddr_in sa=this ->_server_addr;
+    sa.sin_port = htons(new_port);
+
+    int recv_fd = socket(AF_INET, SOCK_STREAM, 0);
+    if (recv_fd < 0) {
+        error("[NetworkAgent::requestFile] Cannot open socket");
+        return -1;
+    }
+    if (connect(recv_fd, (struct sockaddr *) &sa, sizeof(sa)) < 0) {
+        error("[NetworkAgent::requestFile] Cannot connect");
+        return -1;
+    }
+    printf("Connection established\n");
+
+    int32_t fileSize = readInt32(recv_fd);
+    const int BUF_SZ = 8*1024*1024;
+    char* buf = new char[BUF_SZ]; // 8MB
+    int n;
+
+    // tmp_file_path = tmp_dir + "/" + filename_hash
+    std::string tmp_file_path = get_tmp_dir()+std::string("/")+std::to_string(std::hash<std::string>{}(path));
+    FILE * tmp_fp =fopen(tmp_file_path.c_str(), "wb");
+    if(tmp_fp==nullptr){
+        error("cannot open tmp file");
+        return -1;
+    }
+    while (fileSize>0){
+        int sz = fileSize;
+        if(sz>BUF_SZ)sz = BUF_SZ;
+        n=recv(recv_fd, buf, sz,0);
+        printf("[debug] receive %d bytes of file\n",n);
+        fwrite(buf, n, 1,tmp_fp); // write to tmp file
+        fileSize-=n;
+    }
+    printf("[debug] Transfer complete\n");
+
+    delete [] buf;
+    close(recv_fd);
+    printf("[debug] tmp file write complete\n");
+    CONVERT_PATH(real_path, path.c_str());
+    rename(tmp_file_path.c_str(), real_path);   // TODO: check failure
+    printf("[debug] rename tmp file complete\n");
+
+    return 0;
+}
+
+void NetworkAgent::sendRequestedFile(std::string path) {
+    // TODO: fill this function
+    // use a new thread, open a new socket port,
+    // use the main port to send the new port
+    // accept connection
+    // lock the file
+    // send the file to client
+
 }
