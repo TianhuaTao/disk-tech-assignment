@@ -19,7 +19,18 @@
 
 #include "DriveServerAgent.h"
 
+DriveServerAgent::DriveServerAgent(const char *address, int port) {
+    networkAgent = new NetworkAgent();
+    networkAgent->setRole(NetworkAgent::SERVER);
+    networkAgent->listenAsync(address, port, []() {
+        std::cout << "Got connection\n";
+    });
+    printf("NetworkAgent init complete\n");
+}
 
+DriveServerAgent::~DriveServerAgent() {
+    printf("Server agent shut down\n");
+}
 
 void *DriveServerAgent::Init(struct fuse_conn_info *conn, struct fuse_config *cfg) {
     (void) conn;
@@ -185,20 +196,6 @@ int DriveServerAgent::Create(const char *path, mode_t mode, struct fuse_file_inf
     fi->fh = res;
     // TODO: send signal to client
     return 0;
-}
-
-DriveServerAgent::DriveServerAgent(const char *address, int port) {
-    networkAgent = new NetworkAgent();
-    networkAgent->setRole(NetworkAgent::SERVER);
-    networkAgent->listenAsync(address, port, []() {
-        std::cout << "Got connection\n";
-    });
-    printf("NetworkAgent init complete\n");
-
-}
-
-DriveServerAgent::~DriveServerAgent() {
-    printf("Server agent shut down\n");
 }
 
 int DriveServerAgent::Mkdir(const char *path, mode_t mode) {

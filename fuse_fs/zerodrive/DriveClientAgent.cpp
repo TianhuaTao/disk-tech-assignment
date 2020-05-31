@@ -28,6 +28,41 @@ DriveClientAgent::DriveClientAgent(const char *address, int port) {
     // TODO: connect to server
 }
 
+DriveClientAgent::~DriveClientAgent() {
+    printf("Client agent shut down\n");
+}
+
+void *DriveClientAgent::Init(struct fuse_conn_info *conn, struct fuse_config *cfg) {
+    // TODO: implement this function
+        (void) conn;
+    cfg->use_ino = 1;
+
+    /* Pick up changes from lower filesystem right away. This is
+	   also necessary for better hardlink support. When the kernel
+	   calls the unlink() handler, it does not know the inode of
+	   the to-be-removed entry and can therefore not invalidate
+	   the cache of the associated inode - resulting in an
+	   incorrect st_nlink value being reported for any remaining
+	   hardlinks to this inode. */
+    cfg->entry_timeout = 0;
+    cfg->attr_timeout = 0;
+    cfg->negative_timeout = 0;
+
+    printf("data path: %s\n", get_data_dir());
+
+    // TODO: check failure
+    if (mkdir(get_data_dir(), 0777) == -1) {
+        if (errno == EEXIST) {
+            // already exists
+            printf("found previous data\n");
+        } else {
+            printf("cannot create data folder\n");
+        }
+    }
+
+    return nullptr;
+}
+
 int DriveClientAgent::Rename(const char *from, const char *to, unsigned int flags) {
     // TODO: implement this function
     // it's rename
@@ -186,15 +221,6 @@ int DriveClientAgent::Getattr(const char *path, struct stat *stbuf, struct fuse_
     return 0;
 }
 
-DriveClientAgent::~DriveClientAgent() {
-    printf("Client agent shut down\n");
-}
-
-void *DriveClientAgent::Init(struct fuse_conn_info *conn, struct fuse_config *cfg) {
-    // TODO: implement this function
-    return nullptr;
-}
-
 int DriveClientAgent::Mkdir(const char *path, mode_t mode) {
     // TODO: implement this function
     std::cerr<<"[debug] Client Mkdir:"<<path<<std::endl;
@@ -202,6 +228,7 @@ int DriveClientAgent::Mkdir(const char *path, mode_t mode) {
     CONVERT_PATH(real_path, path)
 
     std::cerr<<"[debug] Client Mkdir - realpath is "<<real_path<<std::endl;
+    std::cerr<<"[debug] Client Mkdir - path is "<<path<<std::endl;
     res = mkdir(real_path, mode);
     std::cerr<<"[debug] Client Mkdir - res="<<res<<std::endl;
     if (res == -1)
