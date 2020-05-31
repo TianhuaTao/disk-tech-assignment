@@ -136,7 +136,7 @@ int DriveServerAgent::Create(const char *path, mode_t mode, struct fuse_file_inf
     // send signal to client
     std::vector<std::string> detail;
     detail.push_back(std::string(path));
-    //detail.push_back(std::string(mode));
+    detail.push_back(std::to_string(mode));
     this->broadcastChanges(CREATE, detail);
     return fileOperation->Create(path,mode,fi);
 }
@@ -146,7 +146,7 @@ int DriveServerAgent::Mkdir(const char *path, mode_t mode) {
     // send signal to client
     std::vector<std::string> detail;
     detail.push_back(std::string(path));
-    //detail.push_back(std::string(mode));
+    detail.push_back(std::to_string(mode));
     this->broadcastChanges(MKDIR, detail);
 
     return fileOperation->Mkdir(path, mode);
@@ -177,7 +177,7 @@ int DriveServerAgent::Chmod(const char *path, mode_t mode, struct fuse_file_info
     // send signal to client
     std::vector<std::string> detail;
     detail.push_back(std::string(path));
-    //detail.push_back(std::string(mode));
+    detail.push_back(std::to_string(mode));
     this->broadcastChanges(CHMOD, detail);
 
     return fileOperation->Chmod(path, mode, fi);
@@ -188,8 +188,8 @@ int DriveServerAgent::Chown(const char *path, uid_t uid, gid_t gid, struct fuse_
     // send signal to client
     std::vector<std::string> detail;
     detail.push_back(std::string(path));
-    //detail.push_back(std::string(uid));
-    //detail.push_back(std::string(gid));
+    detail.push_back(std::to_string(uid));
+    detail.push_back(std::to_string(gid));
     this->broadcastChanges(CHOWN, detail);
 
     return fileOperation->Chown(path, uid, gid, fi);
@@ -217,15 +217,23 @@ int DriveServerAgent::broadcastChanges(enum Message msg, std::vector<std::string
             networkAgent->sendMessageToAll(msg, detail);
             break;
         case CREATE:
-            //assert(detail.size() == 2);
+            assert(detail.size() == 2);
             networkAgent->sendMessageToAll(msg, detail);
             break;
         case MKDIR:
-            //assert(detail.size() == 2);
+            assert(detail.size() == 2);
             networkAgent->sendMessageToAll(msg, detail);
             break;
         case RMDIR:
-            //assert(detail.size() == 1);
+            assert(detail.size() == 1);
+            networkAgent->sendMessageToAll(msg, detail);
+            break;
+        case CHMOD:
+            assert(detail.size() == 2);
+            networkAgent->sendMessageToAll(msg, detail);
+            break;
+        case CHOWN:
+            assert(detail.size() == 3);
             networkAgent->sendMessageToAll(msg, detail);
             break;
         default:
