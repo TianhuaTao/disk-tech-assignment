@@ -1,1 +1,1 @@
-./zerodrive -f --server --port=10086 --prefix=zerodrive_internal_s tmp_s
+./zerodrive -f --server --port=10087 --prefix=zerodrive_internal_s tmp_s

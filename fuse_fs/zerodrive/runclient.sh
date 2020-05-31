@@ -1,1 +1,1 @@
-./zerodrive -f --client --address=127.0.0.1 --port=10086 --prefix=zerodrive_internal_c tmp_c
+./zerodrive -f --client --address=127.0.0.1 --port=10087 --prefix=zerodrive_internal_c tmp_c

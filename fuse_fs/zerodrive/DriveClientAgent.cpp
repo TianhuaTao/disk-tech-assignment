@@ -21,7 +21,7 @@
 DriveClientAgent::DriveClientAgent(const char *address, int port) {
     networkAgent = new NetworkAgent();
     networkAgent->setRole(NetworkAgent::CLIENT);
-    networkAgent->listenAsync(address, port, []() {
+    networkAgent->connectAsync(address, port, []() {
         std::cout << "Got connection\n";
     });
     fileOperation = new FileOperation();

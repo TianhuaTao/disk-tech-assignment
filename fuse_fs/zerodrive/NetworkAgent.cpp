@@ -53,6 +53,8 @@ int NetworkAgent::listenAsync(const char *address, int port, std::function<void(
     sa.sin_addr.s_addr = INADDR_ANY;
     sa.sin_port = htons(port);
 
+    std::cerr<<"[debug]NetworkAgent::listenAsync() port = "<<port<<" "<<sa.sin_port<<std::endl;
+
     // TODO: use thread pool to call listenSync
     listeningThread = new std::thread(&NetworkAgent::listenSync, this, sa, callback);
     return 0;
@@ -67,6 +69,12 @@ int NetworkAgent::listenSync(struct sockaddr_in server_addr, std::function<void(
         return 1;
     }
     if (bind(socket_fd, (struct sockaddr *) &server_addr, sizeof(server_addr)) < 0) {
+        std::cerr<<socket_fd<<" "
+            //<<server_addr.sin_addr<<" "
+            <<server_addr.sin_family<<" "
+            <<server_addr.sin_port<<" "
+            <<server_addr.sin_zero
+            <<std::endl;
         error("Cannot bind socket");
         return 1;
     }
