@@ -1,6 +1,6 @@
 #include "Protocol.h"
 
-extern int Message_Number[10]={
+int Message_Number[10]={
     0,
     1,
     2,

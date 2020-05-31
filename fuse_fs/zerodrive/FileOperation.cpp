@@ -16,6 +16,8 @@
 #include "op.h"
 #include "Protocol.h"
 
+#define DEBUG_FO
+
 FileOperation::FileOperation() {
     printf("File System init complete\n");
 }
@@ -56,7 +58,9 @@ void *FileOperation::Init(struct fuse_conn_info *conn, struct fuse_config *cfg) 
 
 //-------------------init-------------------------------------------------------
 
-int FileOperation::Read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi) {
+int FileOperation::Read(const char *path, char *buf, size_t size, 
+                    off_t offset, struct fuse_file_info *fi) {
+    std::cerr<<"[debug] Read, path="<<path<<std::endl;
     int fd;
     int res;
     printf("[debug] read\n");
@@ -80,6 +84,7 @@ int FileOperation::Read(const char *path, char *buf, size_t size, off_t offset, 
 }
 
 int FileOperation::Getattr(const char *path, struct stat *stbuf, struct fuse_file_info *fi) {
+    //std::cerr<<"[debug] Getattr, path="<<path<<std::endl;
     (void) fi;
     int res;
     CONVERT_PATH(real_path, path)
@@ -92,7 +97,11 @@ int FileOperation::Getattr(const char *path, struct stat *stbuf, struct fuse_fil
 
 //---------------------will do something-----------------------------------------------------------------
 
-int FileOperation::Write(const char *path, const char *buf, size_t size, off_t offset, struct fuse_file_info *fi) {
+int FileOperation::Write(const char *path, const char *buf, size_t size, 
+            off_t offset, struct fuse_file_info *fi) {
+#ifdef DEBUG_FO
+    std::cerr<<"[debug] Write, path="<<path<<std::endl;
+#endif
     int fd;
     int res;
     printf("[debug] write\n");
@@ -118,6 +127,9 @@ int FileOperation::Write(const char *path, const char *buf, size_t size, off_t o
 }
 
 int FileOperation::Rename(const char *from, const char *to, unsigned int flags) {
+#ifdef DEBUG_FO
+    std::cerr<<"[debug] Rename, from="<<from<<", to="<<to<<std::endl;
+#endif
     int res;
     CONVERT_PATH(real_from, from)
     CONVERT_PATH(real_to, to)
@@ -132,6 +144,9 @@ int FileOperation::Rename(const char *from, const char *to, unsigned int flags) 
 }
 
 int FileOperation::Open(const char *path, struct fuse_file_info *fi) {
+#ifdef DEBUG_FO
+    std::cerr<<"[debug] Open, path="<<path<<std::endl;
+#endif
     int res;
     printf("[debug] open\n");
     CONVERT_PATH(real_path, path);
@@ -146,6 +161,9 @@ int FileOperation::Open(const char *path, struct fuse_file_info *fi) {
 
 int FileOperation::Readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offset, struct fuse_file_info *fi,
                           enum fuse_readdir_flags flags) {
+#ifdef DEBUG_FO
+    std::cerr<<"[debug] Readdir, path="<<path<<std::endl;
+#endif
     DIR *dp;
     struct dirent *de;
 
@@ -174,6 +192,9 @@ int FileOperation::Readdir(const char *path, void *buf, fuse_fill_dir_t filler, 
 }
 
 int FileOperation::Create(const char *path, mode_t mode, struct fuse_file_info *fi) {
+#ifdef DEBUG_FO
+    std::cerr<<"[debug] Create, path="<<path<<std::endl;
+#endif
     int res;
     CONVERT_PATH(real_path, path);
 
@@ -187,6 +208,9 @@ int FileOperation::Create(const char *path, mode_t mode, struct fuse_file_info *
 }
 
 int FileOperation::Mkdir(const char *path, mode_t mode) {
+#ifdef DEBUG_FO
+    std::cerr<<"[debug] Mkdir, path="<<path<<std::endl;
+#endif
     int res;
     CONVERT_PATH(real_path, path)
 
@@ -198,6 +222,9 @@ int FileOperation::Mkdir(const char *path, mode_t mode) {
 }
 
 int FileOperation::Rmdir(const char *path) {
+#ifdef DEBUG_FO
+    std::cerr<<"[debug] Rmdir, path="<<path<<std::endl;
+#endif
     int res;
     CONVERT_PATH(real_path, path)
 
@@ -209,6 +236,9 @@ int FileOperation::Rmdir(const char *path) {
 }
 
 int FileOperation::Symlink(const char *from, const char *to) {
+#ifdef DEBUG_FO
+    std::cerr<<"[debug] Symlink, from="<<from<<", to="<<to<<std::endl;
+#endif
     int res;
     CONVERT_PATH(real_from, from)
     CONVERT_PATH(real_to, to)
@@ -221,6 +251,9 @@ int FileOperation::Symlink(const char *from, const char *to) {
 }
 
 int FileOperation::Chmod(const char *path, mode_t mode, struct fuse_file_info *fi) {
+#ifdef DEBUG_FO
+    std::cerr<<"[debug] Chmod, path="<<path<<", mode="<<mode<<std::endl;
+#endif
     (void) fi;
     int res;
     CONVERT_PATH(real_path, path);
@@ -232,6 +265,9 @@ int FileOperation::Chmod(const char *path, mode_t mode, struct fuse_file_info *f
 }
 
 int FileOperation::Chown(const char *path, uid_t uid, gid_t gid, struct fuse_file_info *fi) {
+#ifdef DEBUG_FO
+    std::cerr<<"[debug] Chown, path="<<path<<", uid="<<uid<<", gid="<<gid<<std::endl;
+#endif
     (void) fi;
     int res;
     CONVERT_PATH(real_path, path);
@@ -242,6 +278,9 @@ int FileOperation::Chown(const char *path, uid_t uid, gid_t gid, struct fuse_fil
 }
 
 int FileOperation::Readlink(const char *path, char *buf, size_t size) {
+#ifdef DEBUG_FO
+    std::cerr<<"[debug] Readlink, path="<<path<<std::endl;
+#endif
     int res;
     CONVERT_PATH(real_path, path)
 

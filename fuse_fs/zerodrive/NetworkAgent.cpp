@@ -1,6 +1,7 @@
 //
 // Created by sam on 2020/5/30.
 //
+#include "Protocol.h"
 #include "NetworkAgent.h"
 #include <sys/socket.h>
 #include <sys/types.h>
