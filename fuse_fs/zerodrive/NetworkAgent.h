@@ -35,6 +35,7 @@ public:
     int listenSync(struct sockaddr_in, std::function<void()> callback);
     int sendRaw(int socket_fd, const char*data, int length);
     int sendMessage(int socket_fd, enum Message msg, const std::vector<std::string> &detail);
+    int sendMessages(std::set<int>& connections, enum Message msg, const std::vector<std::string> &detail);
     int sendMessageToAll( enum Message msg, const std::vector<std::string>& detail);
     int disconnect();
 

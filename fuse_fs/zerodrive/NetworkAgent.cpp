@@ -47,6 +47,13 @@ int NetworkAgent::sendMessageToAll(enum Message msg, const std::vector<std::stri
     return 0;
 }
 
+int NetworkAgent::sendMessages(std::set<int>& connections, enum Message msg, const std::vector<std::string> &detail){
+    for (int fd:connections) {
+        sendMessage(fd, msg, detail);
+    }
+    return 0;
+}
+
 int NetworkAgent::listenAsync(const char *address, int port, std::function<void()> callback) {
     struct sockaddr_in sa{};
     sa.sin_family = AF_INET;
@@ -235,7 +242,6 @@ void NetworkAgent::MessageLoop(int sockfd) {
     }
 
     printf("Stop message loop\n");
-
 }
 
 int NetworkAgent::readBytes(int fd, char *buffer, int length) {
