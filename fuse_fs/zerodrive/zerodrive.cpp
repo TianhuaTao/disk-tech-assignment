@@ -12,7 +12,7 @@
 #include "DriveServerAgent.h"
 #include "DriveClientAgent.h"
 #include "op.h"
-
+#include <signal.h>
 DriveAgent* localAgent;
 static const struct fuse_operations sync_oper = {
 
@@ -122,13 +122,15 @@ const char* global_prefix;
 void server_init()
 {
     localAgent = new DriveServerAgent(options.address, options.port);
-    printf("Server init complete\n");
+    // signal(SIGINT, [](int){ localAgent->freeSocket();});
+    printf("Server agent init complete\n");
 }
 
 void client_init()
 {
     localAgent = new DriveClientAgent(options.address, options.port);
-    printf("Client init complete\n");
+    // signal(SIGINT, [](int){ localAgent->freeSocket();});
+    printf("Client agent init complete\n");
 }
 
 static void show_help(const char *progname)

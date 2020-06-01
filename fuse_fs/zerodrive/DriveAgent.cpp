@@ -17,3 +17,6 @@
 #include "op.h"
 #include "Protocol.h"
 
+void DriveAgent::freeSocket() {
+    networkAgent->freeSocket();
+}

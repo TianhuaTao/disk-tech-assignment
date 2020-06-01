@@ -51,6 +51,8 @@ public:
     virtual void onMsgRename(std::string from, std::string to){};
     virtual void onMsgRmdir(std::string path) {};
     virtual void onMsgChmod(std::string path, mode_t mode){};
+    virtual void onMsgChown(){};
 
+    virtual void freeSocket();
 
 };

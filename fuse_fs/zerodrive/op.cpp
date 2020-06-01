@@ -45,6 +45,8 @@ const char *get_tmp_dir() {
         memset(tmpdir, 0, sizeof tmpdir);
         strcat(tmpdir, "/tmp");
         strcat(tmpdir, global_prefix);
+        int ret = mkdir(tmpdir, 0777);  // create dir
+        // printf("Mkdir: %d\n" , ret);
         initialized = 1;
     }
     return tmpdir;

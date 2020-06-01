@@ -158,7 +158,6 @@ int DriveClientAgent::Readlink(const char *path, char *buf, size_t size) {
     return fileOperation->Readlink(path, buf, size);
 
 
-    return 0;
 }
 
 int DriveClientAgent::broadcastChanges(enum Message msg, std::vector<std::string> detail) {
@@ -174,8 +173,28 @@ int DriveClientAgent::broadcastChanges(enum Message msg, std::vector<std::string
 
 void DriveClientAgent::onMsgWriteDone(std::string path) {
 //    DriveAgent::onMsgWriteDone(path);
-
+    printf("[DriveClientAgent::onMsgWriteDone]\n");
     // TODO: use another thread
     networkAgent->requestFile(path);    // terrible -- will take a long time
 
+}
+
+void DriveClientAgent::onMsgCreate(std::string path, mode_t mode) {
+    DriveAgent::onMsgCreate(path, mode);
+}
+
+void DriveClientAgent::onMsgMkdir(std::string path, mode_t mode) {
+    DriveAgent::onMsgMkdir(path, mode);
+}
+
+void DriveClientAgent::onMsgRename(std::string from, std::string to) {
+    DriveAgent::onMsgRename(from, to);
+}
+
+void DriveClientAgent::onMsgRmdir(std::string path) {
+    DriveAgent::onMsgRmdir(path);
+}
+
+void DriveClientAgent::onMsgChmod(std::string path, mode_t mode) {
+    DriveAgent::onMsgChmod(path, mode);
 }

@@ -38,6 +38,16 @@ public:
 
     void onMsgWriteDone(std::string path) override;
 
+    void onMsgCreate(std::string path, mode_t mode) override;
+
+    void onMsgMkdir(std::string path, mode_t mode) override;
+
+    void onMsgRename(std::string from, std::string to) override;
+
+    void onMsgRmdir(std::string path) override;
+
+    void onMsgChmod(std::string path, mode_t mode) override;
+
 private:
     int broadcastChanges(enum Message msg, std::vector<std::string> detail);
 };

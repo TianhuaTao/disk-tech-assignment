@@ -92,20 +92,22 @@ int DriveServerAgent::Getattr(const char *path, struct stat *stbuf, struct fuse_
 
 int DriveServerAgent::Write(const char *path, const char *buf, size_t size, 
                         off_t offset, struct fuse_file_info *fi) {
+    int ret = fileOperation->Write(path, buf, size, offset, fi);
     // send signal to client
     std::vector<std::string> detail;
     detail.push_back(std::string(path));
     this->broadcastChanges(WRITE_DONE, detail);
-    return fileOperation->Write(path, buf, size, offset, fi);
+    return ret;
 }
 
 int DriveServerAgent::Rename(const char *from, const char *to, unsigned int flags) {
     // send signal to client
+    int ret = fileOperation->Rename(from, to, flags);
     std::vector<std::string> detail;
     detail.push_back(std::string(from));
     detail.push_back(std::string(to));
     this->broadcastChanges(RENAME, detail);
-    return fileOperation->Rename(from, to, flags);
+    return ret;
 }
 
 int DriveServerAgent::Open(const char *path, struct fuse_file_info *fi) {
@@ -123,32 +125,36 @@ int DriveServerAgent::Readdir(const char *path, void *buf, fuse_fill_dir_t fille
 
 int DriveServerAgent::Create(const char *path, mode_t mode, struct fuse_file_info *fi) {
     // TODO: send signal to client
+    int ret = fileOperation->Create(path,mode,fi);
     // send signal to client
     std::vector<std::string> detail;
     detail.push_back(std::string(path));
     detail.push_back(std::to_string(mode));
     this->broadcastChanges(CREATE, detail);
-    return fileOperation->Create(path,mode,fi);
+    return ret;
 }
 
 int DriveServerAgent::Mkdir(const char *path, mode_t mode) {
     // TODO: send signal to client
+    int ret = fileOperation->Mkdir(path, mode);
+
     // send signal to client
     std::vector<std::string> detail;
     detail.push_back(std::string(path));
     detail.push_back(std::to_string(mode));
     this->broadcastChanges(MKDIR, detail);
 
-    return fileOperation->Mkdir(path, mode);
+    return ret;
 }
 
 int DriveServerAgent::Rmdir(const char *path) {
     // TODO: send signal to client
     // send signal to client
+    int ret = fileOperation->Rmdir(path);
     std::vector<std::string> detail;
     detail.push_back(std::string(path));
     this->broadcastChanges(RMDIR, detail);
-    return fileOperation->Rmdir(path);
+    return ret;
 }
 
 int DriveServerAgent::Symlink(const char *from, const char *to) {
@@ -164,13 +170,14 @@ int DriveServerAgent::Symlink(const char *from, const char *to) {
 int DriveServerAgent::Chmod(const char *path, mode_t mode, struct fuse_file_info *fi) {
 
     // TODO: send signal to client
+    int ret= fileOperation->Chmod(path, mode, fi);
     // send signal to client
     std::vector<std::string> detail;
     detail.push_back(std::string(path));
     detail.push_back(std::to_string(mode));
     this->broadcastChanges(CHMOD, detail);
 
-    return fileOperation->Chmod(path, mode, fi);
+    return ret;
 }
 
 int DriveServerAgent::Chown(const char *path, uid_t uid, gid_t gid, struct fuse_file_info *fi) {
