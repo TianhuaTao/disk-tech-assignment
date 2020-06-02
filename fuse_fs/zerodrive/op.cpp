@@ -4,14 +4,10 @@
 #include <cstdio>
 #include "op.h"
 #include <unistd.h>
-
 #include <cstring>
-
 #include "DriveAgent.h"
-
-
-
 #include "zerodrive_common.h"
+
 using namespace ZeroDrive;
 
 /** Get file attributes.

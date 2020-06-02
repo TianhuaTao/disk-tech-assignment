@@ -238,7 +238,7 @@ void NetworkAgent::MessageLoop(int sockfd) {
             std::cout << "Receive: PULL, ";
 
             uint64_t last_sync = readUint64(sockfd);
-            std::cout << "last_sync="<<last_sync<<"\n";
+            std::cout << "last_sync=" << last_sync << "\n";
 
             dynamic_cast<DriveServerAgent *>(hostDriveAgent)
                     ->handlePull(sockfd, last_sync);
@@ -432,7 +432,7 @@ uint64_t NetworkAgent::pullfromServer(uint64_t last_sync) {
         (void) string_cnt;
         while (true) {
             token = readToken(server_fd);
-            printf("[debug] token=%d\n" , token);
+            printf("[debug] token=%d\n", token);
 
             if (token == NONE) {
                 printf("[debug] token=NONE\n");
@@ -473,7 +473,7 @@ uint64_t NetworkAgent::pullfromServer(uint64_t last_sync) {
                 break;
             }
         }
-        auto stamp=readUint64(server_fd);
+        auto stamp = readUint64(server_fd);
 
         printf("[Pull] All done, new stamp = %lu\n", stamp);
         return stamp;
@@ -540,7 +540,7 @@ uint64_t NetworkAgent::pullfromServer(uint64_t last_sync) {
         dynamic_cast<DriveClientAgent *>(hostDriveAgent)->handleUpdate(server_fd,
                                                                        newFiles, deleteFiles, newDirs,
                                                                        deleteDirs, renameDirs);
-        uint64_t stamp=readUint64(server_fd);
+        uint64_t stamp = readUint64(server_fd);
 
         return stamp;
 
@@ -548,7 +548,7 @@ uint64_t NetworkAgent::pullfromServer(uint64_t last_sync) {
         printf("[Pull] Zerodrive is up to date\n");
         return last_sync;
     } else {
-        printf("[Pull] Unknown token %d\n" ,token);
+        printf("[Pull] Unknown token %d\n", token);
         return last_sync;
     }
 }
@@ -592,8 +592,8 @@ void NetworkAgent::sendAllData(int fd) {
         }
     }
     sendToken(fd, NONE);
-    auto stamp =  dynamic_cast<DriveServerAgent*>(hostDriveAgent)->getServerStamp();
-    sendRaw(fd, (char*)&stamp, sizeof(stamp));
+    auto stamp = dynamic_cast<DriveServerAgent *>(hostDriveAgent)->getServerStamp();
+    sendRaw(fd, (char *) &stamp, sizeof(stamp));
 }
 
 void

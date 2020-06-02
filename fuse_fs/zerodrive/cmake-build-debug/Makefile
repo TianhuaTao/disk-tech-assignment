@@ -48,10 +48,10 @@ RM = /home/sam/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/201.7223.86/bin/cm
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/sam/dev/zerodrive
+CMAKE_SOURCE_DIR = /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/sam/dev/zerodrive/cmake-build-debug
+CMAKE_BINARY_DIR = /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/sam/dev/zerodrive/cmake-build-debug/CMakeFiles /home/sam/dev/zerodrive/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/CMakeFiles /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/sam/dev/zerodrive/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target

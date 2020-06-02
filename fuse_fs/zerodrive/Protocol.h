@@ -5,16 +5,16 @@
 
 enum Operation_t{
     NONE,
-    WRITE_DONE,//1
-    RENAME,//2
-    MKDIR,//2
-    RMDIR,//1
-    CREATE,//2
-    CHMOD,//2
-    CHOWN,//3
+    WRITE_DONE,
+    RENAME,
+    MKDIR,
+    RMDIR,
+    CREATE,
+    CHMOD,
+    CHOWN,
     REMOVE,
     CREATE_DIR,
-    REQUEST_FILE, // 1
+    REQUEST_FILE,
     OPEN,
     UNLINK,
     UPDATE,
@@ -34,7 +34,7 @@ struct OperationRecord{
     OperationRecord(Operation_t t, const std::string& arg):type(t){
         args.push_back(arg);
     }
-    OperationRecord(Operation_t t, std::vector<std::string> a):type(t),args(a){
+    OperationRecord(Operation_t t, const std::vector<std::string>& a):type(t),args(a){
 
     }
 };

@@ -86,7 +86,7 @@ int SharedQueue<T>::size() {
 
 template<typename T>
 bool SharedQueue<T>::empty() {
-    return size()==0;
+    return size() == 0;
 }
 
 

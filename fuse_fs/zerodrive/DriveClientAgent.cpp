@@ -2,20 +2,13 @@
 
 #include "DriveAgent.h"
 #include <fcntl.h>
-#include <sys/stat.h>
-#include <cassert>
-#include <dirent.h>
-#include <cerrno>
-#include <cstring>
 #include <sys/types.h>
 #include <cstdio>
 #include <pwd.h>
-#include <unistd.h>
 #include "NetworkAgent.h"
 #include <iostream>
 #include "op.h"
 #include "Protocol.h"
-
 #include "DriveClientAgent.h"
 #include "zerodrive_common.h"
 
@@ -48,19 +41,10 @@ void *DriveClientAgent::Init(struct fuse_conn_info *conn, struct fuse_config *cf
 int DriveClientAgent::Read(const char *path, char *buf, size_t size,
                            off_t offset, struct fuse_file_info *fi) {
     return fileOperation->Read(path, buf, size, offset, fi);
-    // send signal to client
-    //std::vector<std::string> detail;
-    //detail.push_back(std::string(path));
-    //this->broadcastChanges(WRITE_DONE, detail);
 }
 
 int DriveClientAgent::Getattr(const char *path, struct stat *stbuf, struct fuse_file_info *fi) {
     return fileOperation->Getattr(path, stbuf, fi);
-    //TODO: send signal to client
-    // send signal to client
-    //std::vector<std::string> detail;
-    //detail.push_back(std::string(path));
-    //this->broadcastChanges(WRITE_DONE, detail);
 }
 
 //---------------------will do something-----------------------------------------------------------------
@@ -100,7 +84,6 @@ int DriveClientAgent::Open(const char *path, struct fuse_file_info *fi) {
         backgroundUpdater->dirtyChanges.push_back(r);
     }
     return ret;
-
 }
 
 int
@@ -149,12 +132,6 @@ int DriveClientAgent::Rmdir(const char *path) {
 
 int DriveClientAgent::Symlink(const char *from, const char *to) {
     return fileOperation->Symlink(from, to);
-    // TODO: send signal to client
-    //what will symlink do?????????
-    //std::vector<std::string> detail;
-    //detail.push_back(std::string(from));
-    //detail.push_back(std::string(to));
-    //this->broadcastChanges(WRITE_DONE, detail);
 }
 
 int DriveClientAgent::Chmod(const char *path, mode_t mode, struct fuse_file_info *fi) {
@@ -176,7 +153,6 @@ int DriveClientAgent::Chown(const char *path, uid_t uid, gid_t gid, struct fuse_
     detail.emplace_back(path);
     detail.push_back(std::to_string(uid));
     detail.push_back(std::to_string(gid));
-//    this->broadcastChanges(CHOWN, detail);
 
     return fileOperation->Chown(path, uid, gid, fi);
 }
@@ -187,44 +163,6 @@ int DriveClientAgent::Readlink(const char *path, char *buf, size_t size) {
 
 }
 
-//int DriveClientAgent::broadcastChanges(enum Operation_t msg, std::vector<std::string> detail) {
-//    if(msg>0&&msg<10){
-//        assert(detail.size() == (unsigned long) Message_Number[msg]);
-//        networkAgent->sendMessageToAll(msg, detail);
-//    }else
-//    {
-//        std::cout << "Operation_t not supported\n";
-//    }
-//    return 0;
-//}
-
-//void DriveClientAgent::onMsgWriteDone(std::string path) {
-////    DriveAgent::onMsgWriteDone(path);
-//    printf("[DriveClientAgent::onMsgWriteDone]\n");
-//    // TODO: use another thread
-//    networkAgent->requestFile(path);    // terrible -- will take a long time
-//
-//}
-
-//void DriveClientAgent::onMsgCreate(std::string path, mode_t mode) {
-//    DriveAgent::onMsgCreate(path, mode);
-//}
-//
-//void DriveClientAgent::onMsgMkdir(std::string path, mode_t mode) {
-//    DriveAgent::onMsgMkdir(path, mode);
-//}
-//
-//void DriveClientAgent::onMsgRename(std::string from, std::string to) {
-//    DriveAgent::onMsgRename(from, to);
-//}
-//
-//void DriveClientAgent::onMsgRmdir(std::string path) {
-//    DriveAgent::onMsgRmdir(path);
-//}
-//
-//void DriveClientAgent::onMsgChmod(std::string path, mode_t mode) {
-//    DriveAgent::onMsgChmod(path, mode);
-//}
 
 int DriveClientAgent::Unlink(const char *path) {
     int ret = fileOperation->Unlink(path);
@@ -243,24 +181,19 @@ void DriveClientAgent::handleUpdate(int connection_fd, const std::vector<std::st
                                     const std::vector<std::string> &deleteDirs,
                                     const std::vector<std::pair<std::string, std::string>> &renameDirs) {
     printf("[DriveClientAgent] Processing updates\n");
-    // TODO: this is buggy, just like DriveServerAgent
     for (const auto &d: deleteDirs) {
-//        fileOperation->Rmdir(d.c_str() );
         this->Rmdir(d.c_str());
     }
     for (const auto &path: deleteFiles) {
-//        fileOperation->Unlink(path.c_str());
         this->Unlink(path.c_str());
     }
     for (const auto &d: newDirs) {
-//        fileOperation->Mkdir(d.c_str(), 0777);
         this->Mkdir(d.c_str(), 0777);
     }
     for (const auto &path: newFiles) {
         networkAgent->downloadFile(connection_fd, path);
     }
     for (const auto &p: renameDirs) {
-//       fileOperation->Rename(p.first.c_str(),p.second.c_str(), 0);
         this->Rename(p.first.c_str(), p.second.c_str(), 0);
     }
 }
@@ -348,8 +281,8 @@ void DriveClientAgent::BackgroundUpdater::update() {
         || !newDirs.empty() || !deleteDirs.empty() || !renameDirs.empty()) {
 
         auto newStamp = host->networkAgent->pushToServer(newFiles, deleteFiles,
-                                         newDirs, deleteDirs, renameDirs);
-        dynamic_cast<DriveClientAgent*>(host)-> last_sync = newStamp;
+                                                         newDirs, deleteDirs, renameDirs);
+        dynamic_cast<DriveClientAgent *>(host)->last_sync = newStamp;
         printf("PUSH done, last_sync=%lu\n", newStamp);
     }
     /// moved

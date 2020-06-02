@@ -1,6 +1,5 @@
 #define FUSE_USE_VERSION 31
 
-
 #include "DriveAgent.h"
 #include <fcntl.h>
 #include <sys/stat.h>

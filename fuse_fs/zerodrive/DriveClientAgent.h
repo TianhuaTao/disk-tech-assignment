@@ -4,24 +4,25 @@
 class DriveClientAgent : public DriveAgent {
 
 private:
-    struct BackgroundUpdater{
-        DriveClientAgent* host;
-        explicit BackgroundUpdater(DriveClientAgent* driveClientAgent);
+    struct BackgroundUpdater {
+
+        explicit BackgroundUpdater(DriveClientAgent *driveClientAgent);
+
         void run();
-        std::thread *updatingThread = nullptr;
-        bool running = false;
 
         void update();
+
+        DriveClientAgent *host;
+        std::thread *updatingThread = nullptr;
+        bool running = false;
         SharedQueue<OperationRecord> dirtyChanges;
-
-
     };
 
     BackgroundUpdater *backgroundUpdater;
-//    uint64_t client_stamp{};
     uint64_t last_sync{};
 public:
     DriveClientAgent(const char *address, int port);
+
     ~DriveClientAgent() override;
 
     int Rename(const char *from, const char *to, unsigned int flags) override;
@@ -55,24 +56,11 @@ public:
                struct fuse_config *cfg) override;
 
     int Unlink(const char *path) override;
+
     void handleUpdate(int connection_fd, const std::vector<std::string> &newFiles,
-                                        const std::vector<std::string> &deleteFiles,
-                                        const std::vector<std::string> &newDirs,
-                                        const std::vector<std::string> &deleteDirs,
-                                        const std::vector<std::pair<std::string, std::string>> &renameDirs) ;
+                      const std::vector<std::string> &deleteFiles,
+                      const std::vector<std::string> &newDirs,
+                      const std::vector<std::string> &deleteDirs,
+                      const std::vector<std::pair<std::string, std::string>> &renameDirs);
 
-//    void onMsgWriteDone(std::string path) override;
-//
-//    void onMsgCreate(std::string path, mode_t mode) override;
-//
-//    void onMsgMkdir(std::string path, mode_t mode) override;
-//
-//    void onMsgRename(std::string from, std::string to) override;
-//
-//    void onMsgRmdir(std::string path) override;
-//
-//    void onMsgChmod(std::string path, mode_t mode) override;
-
-private:
-//    int broadcastChanges(enum Operation_t msg, std::vector<std::string> detail);
 };

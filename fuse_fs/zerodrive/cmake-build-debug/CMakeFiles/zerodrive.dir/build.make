@@ -43,10 +43,10 @@ RM = /home/sam/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/201.7223.86/bin/cm
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/sam/dev/zerodrive
+CMAKE_SOURCE_DIR = /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/sam/dev/zerodrive/cmake-build-debug
+CMAKE_BINARY_DIR = /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug
 
 # Include any dependencies generated for this target.
 include CMakeFiles/zerodrive.dir/depend.make
@@ -59,120 +59,120 @@ include CMakeFiles/zerodrive.dir/flags.make
 
 CMakeFiles/zerodrive.dir/DriveAgent.cpp.o: CMakeFiles/zerodrive.dir/flags.make
 CMakeFiles/zerodrive.dir/DriveAgent.cpp.o: ../DriveAgent.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sam/dev/zerodrive/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/zerodrive.dir/DriveAgent.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/zerodrive.dir/DriveAgent.cpp.o -c /home/sam/dev/zerodrive/DriveAgent.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/zerodrive.dir/DriveAgent.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/zerodrive.dir/DriveAgent.cpp.o -c /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/DriveAgent.cpp
 
 CMakeFiles/zerodrive.dir/DriveAgent.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/zerodrive.dir/DriveAgent.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sam/dev/zerodrive/DriveAgent.cpp > CMakeFiles/zerodrive.dir/DriveAgent.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/DriveAgent.cpp > CMakeFiles/zerodrive.dir/DriveAgent.cpp.i
 
 CMakeFiles/zerodrive.dir/DriveAgent.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/zerodrive.dir/DriveAgent.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sam/dev/zerodrive/DriveAgent.cpp -o CMakeFiles/zerodrive.dir/DriveAgent.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/DriveAgent.cpp -o CMakeFiles/zerodrive.dir/DriveAgent.cpp.s
 
 CMakeFiles/zerodrive.dir/DriveClientAgent.cpp.o: CMakeFiles/zerodrive.dir/flags.make
 CMakeFiles/zerodrive.dir/DriveClientAgent.cpp.o: ../DriveClientAgent.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sam/dev/zerodrive/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/zerodrive.dir/DriveClientAgent.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/zerodrive.dir/DriveClientAgent.cpp.o -c /home/sam/dev/zerodrive/DriveClientAgent.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/zerodrive.dir/DriveClientAgent.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/zerodrive.dir/DriveClientAgent.cpp.o -c /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/DriveClientAgent.cpp
 
 CMakeFiles/zerodrive.dir/DriveClientAgent.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/zerodrive.dir/DriveClientAgent.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sam/dev/zerodrive/DriveClientAgent.cpp > CMakeFiles/zerodrive.dir/DriveClientAgent.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/DriveClientAgent.cpp > CMakeFiles/zerodrive.dir/DriveClientAgent.cpp.i
 
 CMakeFiles/zerodrive.dir/DriveClientAgent.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/zerodrive.dir/DriveClientAgent.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sam/dev/zerodrive/DriveClientAgent.cpp -o CMakeFiles/zerodrive.dir/DriveClientAgent.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/DriveClientAgent.cpp -o CMakeFiles/zerodrive.dir/DriveClientAgent.cpp.s
 
 CMakeFiles/zerodrive.dir/DriveServerAgent.cpp.o: CMakeFiles/zerodrive.dir/flags.make
 CMakeFiles/zerodrive.dir/DriveServerAgent.cpp.o: ../DriveServerAgent.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sam/dev/zerodrive/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/zerodrive.dir/DriveServerAgent.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/zerodrive.dir/DriveServerAgent.cpp.o -c /home/sam/dev/zerodrive/DriveServerAgent.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/zerodrive.dir/DriveServerAgent.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/zerodrive.dir/DriveServerAgent.cpp.o -c /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/DriveServerAgent.cpp
 
 CMakeFiles/zerodrive.dir/DriveServerAgent.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/zerodrive.dir/DriveServerAgent.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sam/dev/zerodrive/DriveServerAgent.cpp > CMakeFiles/zerodrive.dir/DriveServerAgent.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/DriveServerAgent.cpp > CMakeFiles/zerodrive.dir/DriveServerAgent.cpp.i
 
 CMakeFiles/zerodrive.dir/DriveServerAgent.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/zerodrive.dir/DriveServerAgent.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sam/dev/zerodrive/DriveServerAgent.cpp -o CMakeFiles/zerodrive.dir/DriveServerAgent.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/DriveServerAgent.cpp -o CMakeFiles/zerodrive.dir/DriveServerAgent.cpp.s
 
 CMakeFiles/zerodrive.dir/op.cpp.o: CMakeFiles/zerodrive.dir/flags.make
 CMakeFiles/zerodrive.dir/op.cpp.o: ../op.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sam/dev/zerodrive/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/zerodrive.dir/op.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/zerodrive.dir/op.cpp.o -c /home/sam/dev/zerodrive/op.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/zerodrive.dir/op.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/zerodrive.dir/op.cpp.o -c /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/op.cpp
 
 CMakeFiles/zerodrive.dir/op.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/zerodrive.dir/op.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sam/dev/zerodrive/op.cpp > CMakeFiles/zerodrive.dir/op.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/op.cpp > CMakeFiles/zerodrive.dir/op.cpp.i
 
 CMakeFiles/zerodrive.dir/op.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/zerodrive.dir/op.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sam/dev/zerodrive/op.cpp -o CMakeFiles/zerodrive.dir/op.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/op.cpp -o CMakeFiles/zerodrive.dir/op.cpp.s
 
 CMakeFiles/zerodrive.dir/zerodrive.cpp.o: CMakeFiles/zerodrive.dir/flags.make
 CMakeFiles/zerodrive.dir/zerodrive.cpp.o: ../zerodrive.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sam/dev/zerodrive/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/zerodrive.dir/zerodrive.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/zerodrive.dir/zerodrive.cpp.o -c /home/sam/dev/zerodrive/zerodrive.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/zerodrive.dir/zerodrive.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/zerodrive.dir/zerodrive.cpp.o -c /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/zerodrive.cpp
 
 CMakeFiles/zerodrive.dir/zerodrive.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/zerodrive.dir/zerodrive.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sam/dev/zerodrive/zerodrive.cpp > CMakeFiles/zerodrive.dir/zerodrive.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/zerodrive.cpp > CMakeFiles/zerodrive.dir/zerodrive.cpp.i
 
 CMakeFiles/zerodrive.dir/zerodrive.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/zerodrive.dir/zerodrive.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sam/dev/zerodrive/zerodrive.cpp -o CMakeFiles/zerodrive.dir/zerodrive.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/zerodrive.cpp -o CMakeFiles/zerodrive.dir/zerodrive.cpp.s
 
 CMakeFiles/zerodrive.dir/Protocol.cpp.o: CMakeFiles/zerodrive.dir/flags.make
 CMakeFiles/zerodrive.dir/Protocol.cpp.o: ../Protocol.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sam/dev/zerodrive/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/zerodrive.dir/Protocol.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/zerodrive.dir/Protocol.cpp.o -c /home/sam/dev/zerodrive/Protocol.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/zerodrive.dir/Protocol.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/zerodrive.dir/Protocol.cpp.o -c /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/Protocol.cpp
 
 CMakeFiles/zerodrive.dir/Protocol.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/zerodrive.dir/Protocol.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sam/dev/zerodrive/Protocol.cpp > CMakeFiles/zerodrive.dir/Protocol.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/Protocol.cpp > CMakeFiles/zerodrive.dir/Protocol.cpp.i
 
 CMakeFiles/zerodrive.dir/Protocol.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/zerodrive.dir/Protocol.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sam/dev/zerodrive/Protocol.cpp -o CMakeFiles/zerodrive.dir/Protocol.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/Protocol.cpp -o CMakeFiles/zerodrive.dir/Protocol.cpp.s
 
 CMakeFiles/zerodrive.dir/NetworkAgent.cpp.o: CMakeFiles/zerodrive.dir/flags.make
 CMakeFiles/zerodrive.dir/NetworkAgent.cpp.o: ../NetworkAgent.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sam/dev/zerodrive/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/zerodrive.dir/NetworkAgent.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/zerodrive.dir/NetworkAgent.cpp.o -c /home/sam/dev/zerodrive/NetworkAgent.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/zerodrive.dir/NetworkAgent.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/zerodrive.dir/NetworkAgent.cpp.o -c /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/NetworkAgent.cpp
 
 CMakeFiles/zerodrive.dir/NetworkAgent.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/zerodrive.dir/NetworkAgent.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sam/dev/zerodrive/NetworkAgent.cpp > CMakeFiles/zerodrive.dir/NetworkAgent.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/NetworkAgent.cpp > CMakeFiles/zerodrive.dir/NetworkAgent.cpp.i
 
 CMakeFiles/zerodrive.dir/NetworkAgent.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/zerodrive.dir/NetworkAgent.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sam/dev/zerodrive/NetworkAgent.cpp -o CMakeFiles/zerodrive.dir/NetworkAgent.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/NetworkAgent.cpp -o CMakeFiles/zerodrive.dir/NetworkAgent.cpp.s
 
 CMakeFiles/zerodrive.dir/FileOperation.cpp.o: CMakeFiles/zerodrive.dir/flags.make
 CMakeFiles/zerodrive.dir/FileOperation.cpp.o: ../FileOperation.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sam/dev/zerodrive/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/zerodrive.dir/FileOperation.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/zerodrive.dir/FileOperation.cpp.o -c /home/sam/dev/zerodrive/FileOperation.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/zerodrive.dir/FileOperation.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/zerodrive.dir/FileOperation.cpp.o -c /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/FileOperation.cpp
 
 CMakeFiles/zerodrive.dir/FileOperation.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/zerodrive.dir/FileOperation.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sam/dev/zerodrive/FileOperation.cpp > CMakeFiles/zerodrive.dir/FileOperation.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/FileOperation.cpp > CMakeFiles/zerodrive.dir/FileOperation.cpp.i
 
 CMakeFiles/zerodrive.dir/FileOperation.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/zerodrive.dir/FileOperation.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sam/dev/zerodrive/FileOperation.cpp -o CMakeFiles/zerodrive.dir/FileOperation.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/FileOperation.cpp -o CMakeFiles/zerodrive.dir/FileOperation.cpp.s
 
 CMakeFiles/zerodrive.dir/zerodrive_common.cpp.o: CMakeFiles/zerodrive.dir/flags.make
 CMakeFiles/zerodrive.dir/zerodrive_common.cpp.o: ../zerodrive_common.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sam/dev/zerodrive/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/zerodrive.dir/zerodrive_common.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/zerodrive.dir/zerodrive_common.cpp.o -c /home/sam/dev/zerodrive/zerodrive_common.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/zerodrive.dir/zerodrive_common.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/zerodrive.dir/zerodrive_common.cpp.o -c /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/zerodrive_common.cpp
 
 CMakeFiles/zerodrive.dir/zerodrive_common.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/zerodrive.dir/zerodrive_common.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sam/dev/zerodrive/zerodrive_common.cpp > CMakeFiles/zerodrive.dir/zerodrive_common.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/zerodrive_common.cpp > CMakeFiles/zerodrive.dir/zerodrive_common.cpp.i
 
 CMakeFiles/zerodrive.dir/zerodrive_common.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/zerodrive.dir/zerodrive_common.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sam/dev/zerodrive/zerodrive_common.cpp -o CMakeFiles/zerodrive.dir/zerodrive_common.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/zerodrive_common.cpp -o CMakeFiles/zerodrive.dir/zerodrive_common.cpp.s
 
 # Object files for target zerodrive
 zerodrive_OBJECTS = \
@@ -200,7 +200,7 @@ zerodrive: CMakeFiles/zerodrive.dir/FileOperation.cpp.o
 zerodrive: CMakeFiles/zerodrive.dir/zerodrive_common.cpp.o
 zerodrive: CMakeFiles/zerodrive.dir/build.make
 zerodrive: CMakeFiles/zerodrive.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/sam/dev/zerodrive/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable zerodrive"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable zerodrive"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/zerodrive.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -213,6 +213,6 @@ CMakeFiles/zerodrive.dir/clean:
 .PHONY : CMakeFiles/zerodrive.dir/clean
 
 CMakeFiles/zerodrive.dir/depend:
-	cd /home/sam/dev/zerodrive/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/sam/dev/zerodrive /home/sam/dev/zerodrive /home/sam/dev/zerodrive/cmake-build-debug /home/sam/dev/zerodrive/cmake-build-debug /home/sam/dev/zerodrive/cmake-build-debug/CMakeFiles/zerodrive.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/CMakeFiles/zerodrive.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/zerodrive.dir/depend
 

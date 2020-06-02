@@ -8,43 +8,43 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/home/sam/dev/zerodrive/cmake-build-debug"/>
+				<Option working_dir="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j16 -f &quot;/home/sam/dev/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/usr/bin/make -j16 -f &quot;/home/sam/dev/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j16 -f &quot;/home/sam/dev/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j16 -f &quot;/home/sam/dev/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j16 -f &quot;/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j16 -f &quot;/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j16 -f &quot;/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j16 -f &quot;/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="/home/sam/dev/zerodrive/cmake-build-debug"/>
+				<Option working_dir="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j16 -f &quot;/home/sam/dev/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/usr/bin/make -j16 -f &quot;/home/sam/dev/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j16 -f &quot;/home/sam/dev/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j16 -f &quot;/home/sam/dev/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j16 -f &quot;/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j16 -f &quot;/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j16 -f &quot;/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j16 -f &quot;/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="/home/sam/dev/zerodrive/cmake-build-debug"/>
+				<Option working_dir="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j16 -f &quot;/home/sam/dev/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="/usr/bin/make -j16 -f &quot;/home/sam/dev/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j16 -f &quot;/home/sam/dev/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j16 -f &quot;/home/sam/dev/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j16 -f &quot;/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j16 -f &quot;/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j16 -f &quot;/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j16 -f &quot;/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="zerodrive">
-				<Option output="/home/sam/dev/zerodrive/cmake-build-debug/zerodrive" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/sam/dev/zerodrive/cmake-build-debug"/>
+				<Option output="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/zerodrive" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/home/sam/dev/zerodrive/."/>
+					<Add directory="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/."/>
 					<Add directory="/usr/local/include/fuse3"/>
 					<Add directory="/usr/include/c++/9"/>
 					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
@@ -55,20 +55,20 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j16 -f &quot;/home/sam/dev/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 zerodrive"/>
-					<CompileFile command="/usr/bin/make -j16 -f &quot;/home/sam/dev/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j16 -f &quot;/home/sam/dev/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j16 -f &quot;/home/sam/dev/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j16 -f &quot;/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 zerodrive"/>
+					<CompileFile command="/usr/bin/make -j16 -f &quot;/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j16 -f &quot;/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j16 -f &quot;/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="zerodrive/fast">
-				<Option output="/home/sam/dev/zerodrive/cmake-build-debug/zerodrive" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/sam/dev/zerodrive/cmake-build-debug"/>
+				<Option output="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/zerodrive" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/home/sam/dev/zerodrive/."/>
+					<Add directory="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/."/>
 					<Add directory="/usr/local/include/fuse3"/>
 					<Add directory="/usr/include/c++/9"/>
 					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
@@ -79,71 +79,71 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j16 -f &quot;/home/sam/dev/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 zerodrive/fast"/>
-					<CompileFile command="/usr/bin/make -j16 -f &quot;/home/sam/dev/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j16 -f &quot;/home/sam/dev/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j16 -f &quot;/home/sam/dev/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j16 -f &quot;/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 zerodrive/fast"/>
+					<CompileFile command="/usr/bin/make -j16 -f &quot;/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j16 -f &quot;/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j16 -f &quot;/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/sam/dev/zerodrive/DriveAgent.cpp">
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/DriveAgent.cpp">
 			<Option target="zerodrive"/>
 		</Unit>
-		<Unit filename="/home/sam/dev/zerodrive/DriveAgent.h">
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/DriveAgent.h">
 			<Option target="zerodrive"/>
 		</Unit>
-		<Unit filename="/home/sam/dev/zerodrive/DriveClientAgent.cpp">
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/DriveClientAgent.cpp">
 			<Option target="zerodrive"/>
 		</Unit>
-		<Unit filename="/home/sam/dev/zerodrive/DriveClientAgent.h">
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/DriveClientAgent.h">
 			<Option target="zerodrive"/>
 		</Unit>
-		<Unit filename="/home/sam/dev/zerodrive/DriveServerAgent.cpp">
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/DriveServerAgent.cpp">
 			<Option target="zerodrive"/>
 		</Unit>
-		<Unit filename="/home/sam/dev/zerodrive/DriveServerAgent.h">
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/DriveServerAgent.h">
 			<Option target="zerodrive"/>
 		</Unit>
-		<Unit filename="/home/sam/dev/zerodrive/FileOperation.cpp">
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/FileOperation.cpp">
 			<Option target="zerodrive"/>
 		</Unit>
-		<Unit filename="/home/sam/dev/zerodrive/FileOperation.h">
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/FileOperation.h">
 			<Option target="zerodrive"/>
 		</Unit>
-		<Unit filename="/home/sam/dev/zerodrive/NetworkAgent.cpp">
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/NetworkAgent.cpp">
 			<Option target="zerodrive"/>
 		</Unit>
-		<Unit filename="/home/sam/dev/zerodrive/NetworkAgent.h">
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/NetworkAgent.h">
 			<Option target="zerodrive"/>
 		</Unit>
-		<Unit filename="/home/sam/dev/zerodrive/Protocol.cpp">
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/Protocol.cpp">
 			<Option target="zerodrive"/>
 		</Unit>
-		<Unit filename="/home/sam/dev/zerodrive/Protocol.h">
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/Protocol.h">
 			<Option target="zerodrive"/>
 		</Unit>
-		<Unit filename="/home/sam/dev/zerodrive/SharedQueue.h">
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/SharedQueue.h">
 			<Option target="zerodrive"/>
 		</Unit>
-		<Unit filename="/home/sam/dev/zerodrive/op.cpp">
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/op.cpp">
 			<Option target="zerodrive"/>
 		</Unit>
-		<Unit filename="/home/sam/dev/zerodrive/op.h">
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/op.h">
 			<Option target="zerodrive"/>
 		</Unit>
-		<Unit filename="/home/sam/dev/zerodrive/zerodrive.cpp">
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/zerodrive.cpp">
 			<Option target="zerodrive"/>
 		</Unit>
-		<Unit filename="/home/sam/dev/zerodrive/zerodrive.h">
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/zerodrive.h">
 			<Option target="zerodrive"/>
 		</Unit>
-		<Unit filename="/home/sam/dev/zerodrive/zerodrive_common.cpp">
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/zerodrive_common.cpp">
 			<Option target="zerodrive"/>
 		</Unit>
-		<Unit filename="/home/sam/dev/zerodrive/zerodrive_common.h">
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/zerodrive_common.h">
 			<Option target="zerodrive"/>
 		</Unit>
-		<Unit filename="/home/sam/dev/zerodrive/CMakeLists.txt">
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>

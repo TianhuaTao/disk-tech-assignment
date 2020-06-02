@@ -16,7 +16,7 @@ private:
 protected:
     NetworkAgent *networkAgent = nullptr;
     FileOperation *fileOperation = nullptr;
-    std::queue<std::string> overdueFiles;   // files that need to be updated
+
 public:
     DriveAgent() = default;
 
@@ -58,21 +58,6 @@ public:
 
     virtual int Unlink(const char *path) = 0;
 
-    // handles message, default do nothing
-    // child class should override these
-//    virtual void onMsgWriteDone(std::string path) {};
-//
-//    virtual void onMsgCreate(std::string path, mode_t mode) {};
-//
-//    virtual void onMsgMkdir(std::string path, mode_t mode) {};
-//
-//    virtual void onMsgRename(std::string from, std::string to) {};
-//
-//    virtual void onMsgRmdir(std::string path) {};
-//
-//    virtual void onMsgChmod(std::string path, mode_t mode) {};
-//
-//    virtual void onMsgChown() {};
 
     virtual void freeSocket();
 

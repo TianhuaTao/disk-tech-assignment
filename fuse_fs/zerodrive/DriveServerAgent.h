@@ -4,6 +4,7 @@
 #include "SharedQueue.h"
 #include "Protocol.h"
 #include <mutex>
+
 class DriveServerAgent : public DriveAgent {
 
 private:
@@ -27,7 +28,9 @@ private:
     BackgroundTask *backgroundTask;
     uint64_t server_stamp{};
     std::mutex stamp_mutex;
+
     uint64_t set_server_stamp_as_now();
+
     uint64_t set_server_stamp_as(uint64_t newStamp);
 
 public:
@@ -43,7 +46,7 @@ public:
     void handleUpdate(int fd, const std::vector<std::string> &newFiles,
                       const std::vector<std::string> &deleteFiles, const std::vector<std::string> &newDirs,
                       const std::vector<std::string> &deleteDirs,
-                      const std::vector<std::pair<std::string,std::string>> &renameDirs);
+                      const std::vector<std::pair<std::string, std::string>> &renameDirs);
 
     int Write(const char *path, const char *buf, size_t size, off_t offset, struct fuse_file_info *fi) override;
 
@@ -77,9 +80,9 @@ public:
 
     int Read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi) override;
 
-//    int broadcastChanges(enum Operation_t msg, std::vector<std::string> detail);
+
     uint64_t getLatestStamp();
 
-    std::vector<OperationRecord> readJournal(const std::string& path);
+    std::vector<OperationRecord> readJournal(const std::string &path);
 };
 
