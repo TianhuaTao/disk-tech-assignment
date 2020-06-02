@@ -53,13 +53,6 @@ int NetworkAgent::sendRaw(int socket_fd, const char *data, int length) {
     return 0;
 }
 
-//int NetworkAgent::sendMessageToAll(enum Operation_t msg, const std::vector<std::string> &detail) {
-//    for (int fd:connections) {
-//        sendMessage(fd, msg, detail);
-//    }
-//    return 0;
-//}
-
 int NetworkAgent::listenAsync(const char *address, int port, std::function<void()> callback) {
     if (listeningThread) {
         error("NetworkAgent is already listening");
@@ -163,7 +156,7 @@ void NetworkAgent::setRole(NetworkAgent::Role newRole) {
     NetworkAgent::role = newRole;
 }
 
-// TODO: complete the function
+
 void NetworkAgent::MessageLoop(int sockfd) {
     printf("Start message loop with socket_fd %d\n", sockfd);
     while (!shutDown) {
@@ -372,8 +365,8 @@ void NetworkAgent::uploadFile(int remote_fd, const std::string &path) {
         }
         bytes_sent += n_sent;
     }
-    printf("[NetworkAgent::uploadFile] sent %d bytes in total\n", bytes_sent);
-    printf("[NetworkAgent::uploadFile] Transfer complete\n");
+    printf("[NetworkAgent::uploadFile] Transfer complete. Sent %d bytes in total\n", bytes_sent);
+
 }
 
 void NetworkAgent::downloadFile(int remote_fd, const std::string &path) {
@@ -432,25 +425,21 @@ uint64_t NetworkAgent::pullfromServer(uint64_t last_sync) {
         (void) string_cnt;
         while (true) {
             token = readToken(server_fd);
-            printf("[debug] token=%d\n", token);
+            printf("[pullfromServer] token=%d\n", token);
 
             if (token == NONE) {
-                printf("[debug] token=NONE\n");
+                printf("[pullfromServer] token=NONE\n");
                 break;
             }
             if (token == MKDIR) {
-                printf("[debug] token=MKDIR\n");
+                printf("[pullfromServer] token=MKDIR\n");
 
                 string_cnt = readInt32(server_fd);  // should be 1
-                printf("[debug] string_cnt=%d\n", string_cnt);
-                std::cout << "------------------------------" << std::endl;
 
                 if (string_cnt != 1) {
                     error("Value error");
                 }
-                std::cout << "==========================" << std::endl;
                 auto path = readString(server_fd);
-                std::cout << "=+++++++++++++++++++++++++" << std::endl;
 
                 std::cout << "mkdir=" << path;
                 CONVERT_PATH(real_path, path.c_str())
@@ -459,7 +448,7 @@ uint64_t NetworkAgent::pullfromServer(uint64_t last_sync) {
                 else
                     std::cout << " [failed]" << std::endl;
             } else if (token == OPEN) {
-                printf("[debug] token=OPEN\n");
+                printf("[pullfromServer] token=OPEN\n");
 
                 string_cnt = readInt32(server_fd);  // should be 1
                 if (string_cnt != 1) error("Value error");
@@ -566,12 +555,11 @@ void NetworkAgent::sendAllData(int fd) {
     auto prefix = std::string(ZeroDrive::get_data_dir());
     printf("[NetworkAgent::sendAllData] %s\n", ZeroDrive::get_data_dir());
     for (const auto &dirEntry: std::filesystem::recursive_directory_iterator(ZeroDrive::get_data_dir())) {
-        std::cout << "[debug] " << dirEntry << "\n";
 
         if (dirEntry.is_directory()) {
             std::vector<std::string> args;
             auto fullPath = dirEntry.path().string();
-            std::cout << "[debug] " << fullPath << "\n";
+            std::cout << "[sendAllData] " << fullPath << "\n";
 
             auto relativePath = fullPath.erase(0, prefix.length());
             args.push_back(relativePath);

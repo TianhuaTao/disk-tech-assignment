@@ -258,13 +258,13 @@ void DriveServerAgent::handlePull(int sockfd, uint64_t last_sync) {
         // download all files
 
         networkAgent->sendToken(sockfd, DOWNLOAD_ALL);
-        std::cout << "[debug] respond DOWNLOAD_ALL" << "\n";
+        std::cout << "[handlePull] respond DOWNLOAD_ALL" << "\n";
 
         networkAgent->sendAllData(sockfd);
     } else {
         /// corresponding to NetworkAgent::pullfromServer -- PATCH
         Operation_t token = PATCH;
-        std::cout << "[debug] respond PATCH" << "\n";
+        std::cout << "[handlePull] respond PATCH" << "\n";
         networkAgent->sendRaw(sockfd, (char *) &token, sizeof token);
         // find diff journals
         std::string possilbe_journal_file = std::to_string(last_sync);
@@ -273,7 +273,7 @@ void DriveServerAgent::handlePull(int sockfd, uint64_t last_sync) {
         for (auto &f: all_journal_files) {
             if (f > possilbe_journal_file) {
                 diff.push_back(f);
-                std::cout << "[debug] Journal file " << f << "\n";
+                std::cout << "[handlePull] Journal file " << f << "\n";
             }
         }
         std::sort(diff.begin(), diff.end());
@@ -281,7 +281,7 @@ void DriveServerAgent::handlePull(int sockfd, uint64_t last_sync) {
 
         // merge commits and transfer them
         std::queue<OperationRecord> combined;
-        for (const auto &f: all_journal_files) {
+        for (const auto &f: diff) {
             auto records = readJournal(f);
             for (auto &r :records) {
                 combined.push(r);
@@ -338,9 +338,10 @@ void DriveServerAgent::handlePull(int sockfd, uint64_t last_sync) {
                     }
                 }
             }
-            printf("Merge complete, ready to send\n");
 
         }
+        printf("Merge complete, ready to send\n");
+
         networkAgent->pushToClient(sockfd, newFiles, deleteFiles,
                                    newDirs, deleteDirs, renameDirs);
         printf("PUSH done\n");
