@@ -12,6 +12,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/Protocol.cpp" "/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/CMakeFiles/zerodrive.dir/Protocol.cpp.o"
   "/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/op.cpp" "/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/CMakeFiles/zerodrive.dir/op.cpp.o"
   "/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/zerodrive.cpp" "/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/CMakeFiles/zerodrive.dir/zerodrive.cpp.o"
+  "/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/zerodrive_common.cpp" "/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/CMakeFiles/zerodrive.dir/zerodrive_common.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
