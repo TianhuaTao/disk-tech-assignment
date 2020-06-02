@@ -16,10 +16,12 @@
 #include <cstring>
 #include <unistd.h>
 #include <cstdio>
+#include <filesystem>
 #include "DriveAgent.h"
 #include "op.h"
 #include "zerodrive_common.h"
 #include "DriveServerAgent.h"
+#include "DriveClientAgent.h"
 
 using namespace ZeroDrive;
 
@@ -149,7 +151,7 @@ int NetworkAgent::connectSync(struct sockaddr_in server_addr, std::function<void
     this->_server_addr = server_addr;
     connections.insert(socket_fd);
     callback();
-    MessageLoop(socket_fd);
+//    MessageLoop(socket_fd);
     return 0;
 }
 
@@ -173,7 +175,7 @@ void NetworkAgent::MessageLoop(int sockfd) {
             std::vector<std::string> deleteFiles;
             std::vector<std::string> newDirs;
             std::vector<std::string> deleteDirs;
-            std::vector<std::pair<std::string,std::string>> renameDirs;
+            std::vector<std::pair<std::string, std::string>> renameDirs;
 
             int32_t string_cnt;
             token = readToken(sockfd);
@@ -219,121 +221,28 @@ void NetworkAgent::MessageLoop(int sockfd) {
             token = readToken(sockfd);
             // token == RENAME_DIR
             string_cnt = readInt32(sockfd);
-            std::cout << string_cnt/2 << " dir renames\n";
-            for (int i = 0; i < string_cnt/2; ++i) {
+            std::cout << string_cnt / 2 << " dir renames\n";
+            for (int i = 0; i < string_cnt / 2; ++i) {
                 auto from = readString(sockfd);
                 auto to = readString(sockfd);
-                std::cout << "from=" << from<<", to="<<to << std::endl;
+                std::cout << "from=" << from << ", to=" << to << std::endl;
                 renameDirs.emplace_back(from, to);
             }
             dynamic_cast<DriveServerAgent *>(hostDriveAgent)->handleUpdate(sockfd,
-                    newFiles, deleteFiles, newDirs,
-                    deleteDirs ,renameDirs);
+                                                                           newFiles, deleteFiles, newDirs,
+                                                                           deleteDirs, renameDirs);
 
 
             // token == PULL
-        } else if(token== PULL){
-            uint64_t last_sync= readUint64(sockfd);
+        } else if (token == PULL) {
+            std::cout << "Receive: PULL, ";
+
+            uint64_t last_sync = readUint64(sockfd);
+            std::cout << "last_sync="<<last_sync<<"\n";
+
             dynamic_cast<DriveServerAgent *>(hostDriveAgent)
-            ->handlePull(sockfd,last_sync);
-        }
-//         else if (token == WRITE_DONE) {
-//            std::cout << "Receive: WRITE_DONE, ";
-//            int32_t string_cnt = readInt32(sockfd);
-////            std::cout << "argc="<<string_cnt<<std::endl;
-//            if (string_cnt != Message_Number[token])error("Wrong value");
-//            auto path = readString(sockfd);
-//            std::cout << "path=" << path << std::endl;
-//
-//            hostDriveAgent->onMsgWriteDone(path);
-//        } else if (token == RENAME) {
-//            std::cout << "Receive: RENAME, ";
-//            int32_t string_cnt = readInt32(sockfd);
-////            std::cout << "argc="<<string_cnt<<std::endl;
-//            if (string_cnt != Message_Number[token])error("Wrong value");
-//            auto from = readString(sockfd);
-//            std::cout << "from=" << from << std::endl;
-//            auto to = readString(sockfd);
-//            std::cerr << "to=" << to << std::endl;
-//
-//            hostDriveAgent->onMsgRename(from, to);
-//
-//        } else if (token == CREATE) {
-//            std::cout << "Receive: CREATE, ";
-//            int32_t string_cnt = readInt32(sockfd);
-////            std::cout << "argc="<<string_cnt<<std::endl;
-//            if (string_cnt != Message_Number[token])error("Wrong value");
-//            auto path = readString(sockfd);
-//            std::cout << "path=" << path << std::endl;
-//            auto mode = (mode_t) std::stoi(readString(sockfd));
-//            std::cout << "mode=" << mode << std::endl;
-//
-//            hostDriveAgent->onMsgCreate(path, mode);
-//
-//        } else if (token == MKDIR) {
-//            std::cout << "Receive: MKDIR, ";
-//            int32_t string_cnt = readInt32(sockfd);
-////            std::cout << "argc="<<string_cnt<<std::endl;
-//            if (string_cnt != Message_Number[token])error("Wrong value");//mkdir has 2 messages
-//            auto path = readString(sockfd);
-//            std::cout << "path=" << path << std::endl;
-//            auto mode = (mode_t) std::stoi(readString(sockfd));
-//            std::cout << "mode=" << mode << std::endl;
-//
-//            hostDriveAgent->onMsgMkdir(path, mode);
-//        } else if (token == RMDIR) {
-//            std::cout << "Receive: RMDIR, ";
-//            int32_t string_cnt = readInt32(sockfd);
-////            std::cout << "argc="<<string_cnt<<std::endl;
-//            if (string_cnt != Message_Number[token])error("Wrong value");//rmdir has 1 messages
-//            auto path = readString(sockfd);
-//            std::cout << "path=" << path << std::endl;
-//
-//            hostDriveAgent->onMsgRmdir(path);
-//
-//        } else if (token == CHMOD) {
-//            std::cout << "Receive: CHMOD, ";
-//            int32_t string_cnt = readInt32(sockfd);
-////            std::cout << "argc="<<string_cnt<<std::endl;
-//            if (string_cnt != Message_Number[token])error("Wrong value");
-//            auto path = readString(sockfd);
-//            std::cout << "path=" << path << std::endl;
-//            auto mode = (mode_t) std::stoi(readString(sockfd));
-//            std::cout << "mode=" << mode << std::endl;
-//
-//            hostDriveAgent->onMsgChmod(path, mode);
-//
-//        } else if (token == CHOWN) {
-//            std::cout << "Receive: CHOWN, ";
-//            int32_t string_cnt = readInt32(sockfd);
-////            std::cout << "argc="<<string_cnt<<std::endl;
-//            if (string_cnt != Message_Number[token])error("Wrong value");
-//            auto path = readString(sockfd);
-//            std::cout << "path=" << path << std::endl;
-//            auto from = (mode_t) std::stoi(readString(sockfd));
-//            std::cout << "mode=" << from << std::endl;
-//            auto to = (mode_t) std::stoi(readString(sockfd));
-//            std::cout << "mode=" << to << std::endl;
-//
-//            hostDriveAgent->onMsgChown();
-//        } else if (token == OPEN) {
-//            std::cout << "Receive: OPEN, ";
-//            int32_t string_cnt = readInt32(sockfd);
-//
-//            if (string_cnt != 1)error("Wrong value");
-//            auto path = readString(sockfd);
-//            std::cout << "path=" << path << std::endl;
-//
-//
-//        } else if (token == REQUEST_FILE) {
-//            std::cout << "Receive: REQUEST_FILE, ";
-//            int32_t string_cnt = readInt32(sockfd);
-//            if (string_cnt != Message_Number[token])error("Wrong value");
-//            auto path = readString(sockfd);
-//            std::cout << "path=" << path << std::endl;
-//            sendRequestedFile(sockfd, path);
-//        }
-        else {
+                    ->handlePull(sockfd, last_sync);
+        } else {
             std::cout << "Can't recognize the token..." << token << std::endl;
             break;
         }
@@ -382,156 +291,6 @@ int NetworkAgent::disconnect() {
     return 0;
 }
 
-// request a file from server
-// first store the file in tmp dir
-// then move it the target location
-//int NetworkAgent::requestFile(std::string path) {
-//    if (role == SERVER)error("server should not request file");
-//    if (connections.empty()) { return -1; }
-//    int server_fd = *connections.begin();
-//    std::vector<std::string> detail;
-//    detail.push_back(path);
-//    sendMessage(server_fd, REQUEST_FILE, detail);
-//
-//    int new_port = readInt32(server_fd);  // server will give a new socket port to transfer file
-//    if (new_port < 0) {
-//        error("Server cannot provide the requested file " + path);
-//        return -1;
-//    }
-//    //TODO: consider using a new thread
-//
-//
-//    // connect to the new port
-//    struct sockaddr_in sa = this->_server_addr;
-//    sa.sin_port = htons(new_port);
-//
-//    int recv_fd = socket(AF_INET, SOCK_STREAM, 0);
-//    if (recv_fd < 0) {
-//        error("[NetworkAgent::requestFile] Cannot open socket");
-//        return -1;
-//    }
-//    if (connect(recv_fd, (struct sockaddr *) &sa, sizeof(sa)) < 0) {
-//        error("[NetworkAgent::requestFile] Cannot connect");
-//        return -1;
-//    }
-//    printf("Connection established\n");
-//
-//    int32_t fileSize = readInt32(recv_fd);  // get file size
-//    printf("[NetworkAgent::requestFile] filesize=%d Bytes\n", fileSize);
-//
-//    const int BUF_SZ = 8 * 1024 * 1024;
-//    char *buf = new char[BUF_SZ]; // 8MB
-//    int n;
-//
-//    // tmp_file_path = tmp_dir + "/" + filename_hash
-//    std::string tmp_file_path = get_tmp_dir() + std::string("/") + std::to_string(std::hash<std::string>{}(path));
-//    FILE *tmp_fp = fopen(tmp_file_path.c_str(), "wb");
-//    if (tmp_fp == nullptr) {
-//        error("cannot open tmp file " + tmp_file_path);
-//        error("errno=" + std::to_string(errno));
-//        return -1;
-//    }
-//    while (fileSize > 0) {
-//        int sz = fileSize;
-//        if (sz > BUF_SZ)sz = BUF_SZ;
-//        n = recv(recv_fd, buf, sz, 0);
-//        if (n == 0) {
-//            error("read 0 byte error");
-//            return -1;
-//        }
-//
-//        int n_write = fwrite(buf, n, 1, tmp_fp); // write to tmp file
-//        if (n_write != 1)error("Write error");
-//        fileSize -= n;
-//        printf("[debug] receive %d bytes of file, remain %d bytes\n", n, fileSize);
-//    }
-//    fclose(tmp_fp);
-//    printf("[debug] Transfer complete\n");
-//
-//    delete[] buf;
-//    close(recv_fd);
-//    printf("[debug] tmp file write complete\n");
-//    CONVERT_PATH(real_path, path.c_str());
-//    rename(tmp_file_path.c_str(), real_path);   // TODO: check failure
-//    printf("[debug] rename tmp file complete\n");
-//
-//    return 0;
-//}
-
-//void NetworkAgent::sendRequestedFile(int fd, std::string path) {
-//    // TODO: fill this function
-//    // use a new thread, open a new socket port,
-//    // use the main port to send the new port
-//    // accept connection
-//    // lock the file
-//    // send the file to client
-//
-//    struct sockaddr_in sa{};
-//    sa.sin_family = AF_INET;
-////    inet_pton(AF_INET,address,&(sa.sin_addr));
-//    sa.sin_addr.s_addr = INADDR_ANY;
-//    int32_t port = listenPort + 8; // just use any empty port
-//    sa.sin_port = htons(port);
-//    int socket_fd = socket(AF_INET, SOCK_STREAM, 0);
-//    if (socket_fd < 0) {
-//        error("[NetworkAgent::sendRequestedFile] Cannot open socket");
-//        return;
-//    }
-//    if (bind(socket_fd, (struct sockaddr *) &sa, sizeof(sa)) < 0) {
-//        std::cerr << socket_fd << " "
-//                  //<<server_addr.sin_addr<<" "
-//                  << sa.sin_family << " "
-//                  << sa.sin_port << " "
-//                  << sa.sin_zero
-//                  << std::endl;
-//        error("Cannot bind socket");
-//        return;
-//    }
-//
-//    listen(socket_fd, 8);
-//    sendRaw(fd, (char *) &port, sizeof(int32_t));
-//
-//    struct sockaddr_in client_addr{};
-//    socklen_t client_len = sizeof(client_addr);
-//    int send_fd = accept(socket_fd, (struct sockaddr *) &client_addr, &client_len);
-//    printf("[NetworkAgent::sendRequestedFile] Connection good\n");
-//    if (send_fd < 0)
-//        error("Error on accept");
-//    CONVERT_PATH(real_path, path.c_str())
-//    int data_fd = open(real_path, O_RDONLY);
-//    if (data_fd == -1) {
-//        error("Cannot open the file to send");
-//        return;
-//    }
-//    struct stat file_stat{};
-//    if (fstat(data_fd, &file_stat) < 0) {
-//        error("Error fstat");
-//        return;
-//    }
-//
-//    int32_t file_sz = file_stat.st_size;
-//    printf("[NetworkAgent::sendRequestedFile] The file size is %d Bytes\n", file_sz);
-//
-//    sendRaw(send_fd, (char *) &file_sz, sizeof(int32_t)); // send file size
-//    int bytes_sent = 0;
-//    while (bytes_sent < file_sz) {
-//        char buf[2 * 1024 * 1024];  //2M
-//        int n_read = read(data_fd, buf, 2 * 1024 * 1024);
-//        int n_sent = 0;
-//        while (n_sent < n_read) {
-//            int sz = send(send_fd, buf + n_sent, n_read, 0);
-//            if (sz < 0) { error("send file error"); }
-//            n_sent += sz;
-//        }
-//        bytes_sent += n_sent;
-//    }
-//    printf("[debug] sent %d bytes in total\n", bytes_sent);
-//
-//    close(send_fd);
-//    close(socket_fd);
-//    printf("[debug] Transfer complete\n");
-//
-//}
 
 void NetworkAgent::freeSocket() {
     for (int c: connections) {
@@ -547,11 +306,11 @@ enum Operation_t NetworkAgent::readToken(int sockfd) {
     return token;
 }
 
-void NetworkAgent::pushToServer(std::set<std::string> &newFiles,
-        std::set<std::string> &deleteFiles,
-                                std::set<std::string> &newDirs,
-                                std::set<std::string>&deleteDirs,
-std::set<std::pair<std::string,std::string>> &renameDirs) {
+uint64_t NetworkAgent::pushToServer(std::set<std::string> &newFiles,
+                                    std::set<std::string> &deleteFiles,
+                                    std::set<std::string> &newDirs,
+                                    std::set<std::string> &deleteDirs,
+                                    std::set<std::pair<std::string, std::string>> &renameDirs) {
 //    printf("debug 0\n");
     int server_fd = *connections.begin();
     std::vector<std::string> newF(newFiles.begin(), newFiles.end());
@@ -559,7 +318,7 @@ std::set<std::pair<std::string,std::string>> &renameDirs) {
     std::vector<std::string> newD(newDirs.begin(), newDirs.end());
     std::vector<std::string> delD(deleteDirs.begin(), deleteDirs.end());
     std::vector<std::string> renameD;
-    for(const auto& p:renameDirs){
+    for (const auto &p:renameDirs) {
         renameD.push_back(p.first);
         renameD.push_back(p.second);
     }
@@ -579,6 +338,9 @@ std::set<std::pair<std::string,std::string>> &renameDirs) {
     for (const auto &path: newF) {
         uploadFile(server_fd, path);
     }
+
+    uint64_t newStamp = readUint64(server_fd);
+    return newStamp;
 }
 
 void NetworkAgent::uploadFile(int remote_fd, const std::string &path) {
@@ -656,18 +418,219 @@ void NetworkAgent::downloadFile(int remote_fd, const std::string &path) {
 
 }
 
-void NetworkAgent::pullfromServer(uint64_t last_sync) {
+uint64_t NetworkAgent::pullfromServer(uint64_t last_sync) {
     int server_fd = *connections.begin();
     Operation_t token = PULL;
-    sendRaw(server_fd, (char*) &token, sizeof(token));  // send token
-    sendRaw(server_fd, (char*) &last_sync, sizeof(last_sync))  ; // send last_sync
-
+    sendRaw(server_fd, (char *) &token, sizeof(token));  // send token
+    sendRaw(server_fd, (char *) &last_sync, sizeof(last_sync)); // send last_sync
+    token = readToken(server_fd);
     // receive
+    if (token == DOWNLOAD_ALL) {
+        /// corresponding to NetworkAgent::sendAllData
+        printf("[Pull] Ready to download everything\n");
+        int32_t string_cnt;
+        (void) string_cnt;
+        while (true) {
+            token = readToken(server_fd);
+            printf("[debug] token=%d\n" , token);
 
+            if (token == NONE) {
+                printf("[debug] token=NONE\n");
+                break;
+            }
+            if (token == MKDIR) {
+                printf("[debug] token=MKDIR\n");
+
+                string_cnt = readInt32(server_fd);  // should be 1
+                printf("[debug] string_cnt=%d\n", string_cnt);
+                std::cout << "------------------------------" << std::endl;
+
+                if (string_cnt != 1) {
+                    error("Value error");
+                }
+                std::cout << "==========================" << std::endl;
+                auto path = readString(server_fd);
+                std::cout << "=+++++++++++++++++++++++++" << std::endl;
+
+                std::cout << "mkdir=" << path;
+                CONVERT_PATH(real_path, path.c_str())
+                if (mkdir(real_path, 0777) == 0)
+                    std::cout << " [successful]" << std::endl;
+                else
+                    std::cout << " [failed]" << std::endl;
+            } else if (token == OPEN) {
+                printf("[debug] token=OPEN\n");
+
+                string_cnt = readInt32(server_fd);  // should be 1
+                if (string_cnt != 1) error("Value error");
+
+                auto path = readString(server_fd);
+                std::cout << "download=" << path;
+
+                downloadFile(server_fd, path);
+            } else {
+                error("Unknown token");
+                break;
+            }
+        }
+        auto stamp=readUint64(server_fd);
+
+        printf("[Pull] All done, new stamp = %lu\n", stamp);
+        return stamp;
+
+    } else if (token == PATCH) {
+        printf("[Pull] Ready to download updated files\n");
+        /// copied form MessageLoop
+        std::vector<std::string> newFiles;
+        std::vector<std::string> deleteFiles;
+        std::vector<std::string> newDirs;
+        std::vector<std::string> deleteDirs;
+        std::vector<std::pair<std::string, std::string>> renameDirs;
+
+        int32_t string_cnt;
+        token = readToken(server_fd);
+        // token == MKDIR
+        string_cnt = readInt32(server_fd);
+        std::cout << string_cnt << " new dirs\n";
+        for (int i = 0; i < string_cnt; ++i) {
+            auto path = readString(server_fd);
+            std::cout << "mkdir=" << path << std::endl;
+            newDirs.push_back(path);
+        }
+
+        token = readToken(server_fd);
+        // token == RMDIR
+        string_cnt = readInt32(server_fd);
+        std::cout << string_cnt << " delete dirs\n";
+        for (int i = 0; i < string_cnt; ++i) {
+            auto path = readString(server_fd);
+            std::cout << "rmdir=" << path << std::endl;
+            deleteDirs.push_back(path);
+        }
+        token = readToken(server_fd);
+        // token == UPDATE
+        string_cnt = readInt32(server_fd);
+        std::cout << string_cnt << " updates\n";
+        for (int i = 0; i < string_cnt; ++i) {
+            auto path = readString(server_fd);
+            std::cout << "update=" << path << std::endl;
+            newFiles.push_back(path);
+        }
+
+        token = readToken(server_fd);
+        // token == DELETE
+        string_cnt = readInt32(server_fd);
+        std::cout << string_cnt << " deletes\n";
+        for (int i = 0; i < string_cnt; ++i) {
+            auto path = readString(server_fd);
+            std::cout << "delete=" << path << std::endl;
+            deleteFiles.push_back(path);
+        }
+
+        token = readToken(server_fd);
+        // token == RENAME_DIR
+        string_cnt = readInt32(server_fd);
+        std::cout << string_cnt / 2 << " dir renames\n";
+        for (int i = 0; i < string_cnt / 2; ++i) {
+            auto from = readString(server_fd);
+            auto to = readString(server_fd);
+            std::cout << "from=" << from << ", to=" << to << std::endl;
+            renameDirs.emplace_back(from, to);
+        }
+        dynamic_cast<DriveClientAgent *>(hostDriveAgent)->handleUpdate(server_fd,
+                                                                       newFiles, deleteFiles, newDirs,
+                                                                       deleteDirs, renameDirs);
+        uint64_t stamp=readUint64(server_fd);
+
+        return stamp;
+
+    } else if (token == UP_TO_DATE) {
+        printf("[Pull] Zerodrive is up to date\n");
+        return last_sync;
+    } else {
+        printf("[Pull] Unknown token %d\n" ,token);
+        return last_sync;
+    }
 }
 
 uint64_t NetworkAgent::readUint64(int fd) {
     uint64_t ret;
     readBytes(fd, (char *) &ret, sizeof(ret));
     return ret;
+}
+
+/// corresponding to NetworkAgent::pullfromServer
+void NetworkAgent::sendAllData(int fd) {
+    printf("[NetworkAgent::sendAllData]\n");
+    hostDriveAgent->lock();
+    auto prefix = std::string(ZeroDrive::get_data_dir());
+    printf("[NetworkAgent::sendAllData] %s\n", ZeroDrive::get_data_dir());
+    for (const auto &dirEntry: std::filesystem::recursive_directory_iterator(ZeroDrive::get_data_dir())) {
+        std::cout << "[debug] " << dirEntry << "\n";
+
+        if (dirEntry.is_directory()) {
+            std::vector<std::string> args;
+            auto fullPath = dirEntry.path().string();
+            std::cout << "[debug] " << fullPath << "\n";
+
+            auto relativePath = fullPath.erase(0, prefix.length());
+            args.push_back(relativePath);
+            std::cout << "[sendAllData] mkdir=" << relativePath << "\n";
+
+            sendMessage(fd, MKDIR, args);
+        } else if (dirEntry.is_regular_file()) {
+            std::vector<std::string> args;
+            auto fullPath = dirEntry.path().string();
+            auto relativePath = fullPath.erase(0, prefix.length());
+            args.push_back(relativePath);
+
+            std::cout << "[sendAllData] out=" << relativePath << "\n";
+            sendMessage(fd, OPEN, args);
+            uploadFile(fd, fullPath);
+        } else {
+            std::cout << "[NetworkAgent::sendAllData] special file: " << dirEntry << "\n";
+        }
+    }
+    sendToken(fd, NONE);
+    auto stamp =  dynamic_cast<DriveServerAgent*>(hostDriveAgent)->getServerStamp();
+    sendRaw(fd, (char*)&stamp, sizeof(stamp));
+}
+
+void
+NetworkAgent::pushToClient(int fd, const std::set<std::string> &newFiles,
+                           const std::set<std::string> &deleteFiles,
+                           const std::set<std::string> &newDirs,
+                           const std::set<std::string> &deleteDirs,
+                           const std::set<std::pair<std::string, std::string>> &renameDirs) {
+
+    std::vector<std::string> newF(newFiles.begin(), newFiles.end());
+    std::vector<std::string> delF(deleteFiles.begin(), deleteFiles.end());
+    std::vector<std::string> newD(newDirs.begin(), newDirs.end());
+    std::vector<std::string> delD(deleteDirs.begin(), deleteDirs.end());
+    std::vector<std::string> renameD;
+    for (const auto &p:renameDirs) {
+        renameD.push_back(p.first);
+        renameD.push_back(p.second);
+    }
+
+
+//    Operation_t token = PUSH;
+//    sendRaw(fd, (char *) &token, sizeof(token));
+
+
+    sendMessage(fd, MKDIR, newD);
+    sendMessage(fd, RMDIR, delD);
+    sendMessage(fd, UPDATE, newF);
+    sendMessage(fd, DELETE, delF);
+    sendMessage(fd, RENAME_DIR, renameD);
+
+//    printf("Message sent\n");
+    for (const auto &path: newF) {
+        uploadFile(fd, path);   // send to client
+    }
+}
+
+int NetworkAgent::sendToken(int socket_fd, Operation_t token) {
+    int32_t i = token;
+    return sendRaw(socket_fd, (char *) &i, sizeof(i));
 }

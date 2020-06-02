@@ -22,7 +22,9 @@ enum Operation_t{
     PUSH,
     RENAME_DIR,
     PULL,
-    UP_TO_DATE
+    UP_TO_DATE,
+    DOWNLOAD_ALL,
+    PATCH,
 };
 
 struct OperationRecord{
@@ -37,4 +39,4 @@ struct OperationRecord{
     }
 };
 
-extern int Message_Number[11];
+//extern int Message_Number[11];

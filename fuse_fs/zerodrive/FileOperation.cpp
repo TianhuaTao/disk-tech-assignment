@@ -340,5 +340,8 @@ std::vector<std::string> FileOperation::getDirEntries(const char *realPath) {
 }
 
 std::vector<std::string> FileOperation::getJournalList() {
-    return getDirEntries(ZeroDrive::get_journal_dir());
+    auto ret= getDirEntries(ZeroDrive::get_journal_dir());
+    ret.erase(std::find(ret.begin(), ret.end(), "."));
+    ret.erase(std::find(ret.begin(), ret.end(), ".."));
+    return ret;
 }

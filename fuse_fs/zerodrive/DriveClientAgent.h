@@ -18,7 +18,7 @@ private:
     };
 
     BackgroundUpdater *backgroundUpdater;
-    uint64_t client_stamp{};
+//    uint64_t client_stamp{};
     uint64_t last_sync{};
 public:
     DriveClientAgent(const char *address, int port);
@@ -55,6 +55,11 @@ public:
                struct fuse_config *cfg) override;
 
     int Unlink(const char *path) override;
+    void handleUpdate(int connection_fd, const std::vector<std::string> &newFiles,
+                                        const std::vector<std::string> &deleteFiles,
+                                        const std::vector<std::string> &newDirs,
+                                        const std::vector<std::string> &deleteDirs,
+                                        const std::vector<std::pair<std::string, std::string>> &renameDirs) ;
 
 //    void onMsgWriteDone(std::string path) override;
 //

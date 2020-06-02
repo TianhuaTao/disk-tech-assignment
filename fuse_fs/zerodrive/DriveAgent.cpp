@@ -24,3 +24,7 @@ void DriveAgent::freeSocket() {
 int DriveAgent::Unlink(const char *path) {
     return 0;
 }
+
+void DriveAgent::lock() {
+
+}

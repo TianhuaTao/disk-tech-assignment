@@ -3,7 +3,7 @@
 #include "DriveAgent.h"
 #include "SharedQueue.h"
 #include "Protocol.h"
-
+#include <mutex>
 class DriveServerAgent : public DriveAgent {
 
 private:
@@ -26,12 +26,16 @@ private:
 
     BackgroundTask *backgroundTask;
     uint64_t server_stamp{};
+    std::mutex stamp_mutex;
+    uint64_t set_server_stamp_as_now();
+    uint64_t set_server_stamp_as(uint64_t newStamp);
+
 public:
     uint64_t getServerStamp() const;
 
     void handlePull(int sockfd, uint64_t last_sync);
 
-public:
+
     DriveServerAgent(const char *address, int port);
 
     ~DriveServerAgent() override;
@@ -74,5 +78,8 @@ public:
     int Read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi) override;
 
 //    int broadcastChanges(enum Operation_t msg, std::vector<std::string> detail);
+    uint64_t getLatestStamp();
+
+    std::vector<OperationRecord> readJournal(const std::string& path);
 };
 

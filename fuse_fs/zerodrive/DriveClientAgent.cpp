@@ -237,6 +237,34 @@ int DriveClientAgent::Unlink(const char *path) {
     return ret;
 }
 
+void DriveClientAgent::handleUpdate(int connection_fd, const std::vector<std::string> &newFiles,
+                                    const std::vector<std::string> &deleteFiles,
+                                    const std::vector<std::string> &newDirs,
+                                    const std::vector<std::string> &deleteDirs,
+                                    const std::vector<std::pair<std::string, std::string>> &renameDirs) {
+    printf("[DriveClientAgent] Processing updates\n");
+    // TODO: this is buggy, just like DriveServerAgent
+    for (const auto &d: deleteDirs) {
+//        fileOperation->Rmdir(d.c_str() );
+        this->Rmdir(d.c_str());
+    }
+    for (const auto &path: deleteFiles) {
+//        fileOperation->Unlink(path.c_str());
+        this->Unlink(path.c_str());
+    }
+    for (const auto &d: newDirs) {
+//        fileOperation->Mkdir(d.c_str(), 0777);
+        this->Mkdir(d.c_str(), 0777);
+    }
+    for (const auto &path: newFiles) {
+        networkAgent->downloadFile(connection_fd, path);
+    }
+    for (const auto &p: renameDirs) {
+//       fileOperation->Rename(p.first.c_str(),p.second.c_str(), 0);
+        this->Rename(p.first.c_str(), p.second.c_str(), 0);
+    }
+}
+
 void DriveClientAgent::BackgroundUpdater::run() {
     running = true;
 
@@ -249,16 +277,16 @@ void DriveClientAgent::BackgroundUpdater::run() {
 }
 
 DriveClientAgent::BackgroundUpdater::BackgroundUpdater(DriveClientAgent *driveClientAgent)
-: host(driveClientAgent) {
-
+        : host(driveClientAgent) {
 }
 
-// stage changes
-// connect to server
-//
-// disconnect
+
 void DriveClientAgent::BackgroundUpdater::update() {
     if (!host->networkAgent->isConnected()) return;
+
+    auto stamp = host->networkAgent->pullfromServer(host->last_sync);
+    host->last_sync = stamp;
+
     printf("update %d local changes\n", dirtyChanges.size());
     std::set<std::string> newFiles;     // the files that are modified
     std::set<std::string> deleteFiles;
@@ -278,7 +306,7 @@ void DriveClientAgent::BackgroundUpdater::update() {
         if (op == CREATE || op == WRITE_DONE || op == OPEN) {
             newFiles.insert(path);
             deleteFiles.erase(path);
-        } else if (op == RENAME) {  // TODO: this is wrong
+        } else if (op == RENAME) {
             newFiles.insert(c.args[1]);
             deleteFiles.erase(c.args[1]);
             newFiles.erase(path);
@@ -319,12 +347,14 @@ void DriveClientAgent::BackgroundUpdater::update() {
     if (!newFiles.empty() || !deleteFiles.empty()
         || !newDirs.empty() || !deleteDirs.empty() || !renameDirs.empty()) {
 
-        host->networkAgent->pushToServer(newFiles, deleteFiles,
-                newDirs, deleteDirs, renameDirs);
-        printf("PUSH done\n");
+        auto newStamp = host->networkAgent->pushToServer(newFiles, deleteFiles,
+                                         newDirs, deleteDirs, renameDirs);
+        dynamic_cast<DriveClientAgent*>(host)-> last_sync = newStamp;
+        printf("PUSH done, last_sync=%lu\n", newStamp);
     }
-
-    host->networkAgent->pullfromServer(host->last_sync);
-    printf("update done\n");
+    /// moved
+//    auto stamp = host->networkAgent->pullfromServer(host->last_sync);
+//    host->last_sync = stamp;
+    printf("[DriveClientAgent::BackgroundUpdater::update] done\n");
 
 }

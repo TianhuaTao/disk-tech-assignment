@@ -76,4 +76,5 @@ public:
 
     virtual void freeSocket();
 
+    void lock();
 };
