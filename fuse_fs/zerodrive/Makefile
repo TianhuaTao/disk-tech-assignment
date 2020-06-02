@@ -1,5 +1,25 @@
-zerodrive: zerodrive.h zerodrive.cpp op.h op.cpp FileOperation.h FileOperation.cpp DriveAgent.h DriveAgent.cpp DriveClientAgent.h DriveClientAgent.cpp DriveServerAgent.h DriveServerAgent.cpp NetworkAgent.h NetworkAgent.cpp Protocol.h Protocol.cpp
-	g++ -Wall zerodrive.cpp op.cpp FileOperation.cpp DriveAgent.cpp DriveClientAgent.cpp DriveServerAgent.cpp NetworkAgent.cpp Protocol.cpp `pkg-config fuse3 --cflags --libs` -o zerodrive
+cxx_files =     zerodrive.cpp\
+                op.cpp\
+                FileOperation.cpp\
+                DriveAgent.cpp\
+                DriveClientAgent.cpp\
+                DriveServerAgent.cpp\
+                NetworkAgent.cpp\
+                Protocol.cpp\
+                zerodrive_common.cpp
+
+h_files =       SharedQueue.h\
+                zerodrive.h\
+                FileOperation.h\
+                DriveAgent.h op.h\
+                Protocol.h\
+                DriveServerAgent.h\
+                DriveClientAgent.h\
+                zerodrive_common.h\
+                NetworkAgent.h
+
+zerodrive: $(h_files) $(cxx_files)
+	g++ -Wall $(cxx_files) `pkg-config fuse3 --cflags --libs` -std=c++17 -o zerodrive
 
 .PHONY:
 clean:

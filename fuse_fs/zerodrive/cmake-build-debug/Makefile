@@ -339,6 +339,33 @@ zerodrive.cpp.s:
 	$(MAKE) -f CMakeFiles/zerodrive.dir/build.make CMakeFiles/zerodrive.dir/zerodrive.cpp.s
 .PHONY : zerodrive.cpp.s
 
+zerodrive_common.o: zerodrive_common.cpp.o
+
+.PHONY : zerodrive_common.o
+
+# target to build an object file
+zerodrive_common.cpp.o:
+	$(MAKE) -f CMakeFiles/zerodrive.dir/build.make CMakeFiles/zerodrive.dir/zerodrive_common.cpp.o
+.PHONY : zerodrive_common.cpp.o
+
+zerodrive_common.i: zerodrive_common.cpp.i
+
+.PHONY : zerodrive_common.i
+
+# target to preprocess a source file
+zerodrive_common.cpp.i:
+	$(MAKE) -f CMakeFiles/zerodrive.dir/build.make CMakeFiles/zerodrive.dir/zerodrive_common.cpp.i
+.PHONY : zerodrive_common.cpp.i
+
+zerodrive_common.s: zerodrive_common.cpp.s
+
+.PHONY : zerodrive_common.s
+
+# target to generate assembly for a file
+zerodrive_common.cpp.s:
+	$(MAKE) -f CMakeFiles/zerodrive.dir/build.make CMakeFiles/zerodrive.dir/zerodrive_common.cpp.s
+.PHONY : zerodrive_common.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -372,6 +399,9 @@ help:
 	@echo "... zerodrive.o"
 	@echo "... zerodrive.i"
 	@echo "... zerodrive.s"
+	@echo "... zerodrive_common.o"
+	@echo "... zerodrive_common.i"
+	@echo "... zerodrive_common.s"
 .PHONY : help
 
 

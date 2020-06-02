@@ -3,19 +3,7 @@
 #include <fuse.h>
 
 class DriveAgent;
-
 extern DriveAgent *localAgent;
-
-const char *get_homedir();
-
-const char *get_data_dir();
-
-const char *get_tmp_dir();
-
-#define CONVERT_PATH(newName, path) \
-        char newName [512];\
-        strcpy(newName, get_data_dir());\
-        strcat(newName, path);
 
 /** Get file attributes.
  *
@@ -66,24 +54,24 @@ int sync_rmdir(const char *);
 int sync_symlink(const char *, const char *);
 
 /** Rename a file
-	 *
-	 * *flags* may be `RENAME_EXCHANGE` or `RENAME_NOREPLACE`. If
-	 * RENAME_NOREPLACE is specified, the filesystem must not
-	 * overwrite *newname* if it exists and return an error
-	 * instead. If `RENAME_EXCHANGE` is specified, the filesystem
-	 * must atomically exchange the two files, i.e. both must
-	 * exist and neither may be deleted.
-	 */
+ *
+ * *flags* may be `RENAME_EXCHANGE` or `RENAME_NOREPLACE`. If
+ * RENAME_NOREPLACE is specified, the filesystem must not
+ * overwrite *newname* if it exists and return an error
+ * instead. If `RENAME_EXCHANGE` is specified, the filesystem
+ * must atomically exchange the two files, i.e. both must
+ * exist and neither may be deleted.
+ */
 int sync_rename(const char *, const char *, unsigned int flags);
 
 /** Create a hard link to a file */
 int sync_link(const char *, const char *);
 
 /** Change the permission bits of a file
-	 *
-	 * `fi` will always be NULL if the file is not currenlty open, but
-	 * may also be NULL if the file is open.
-	 */
+ *
+ * `fi` will always be NULL if the file is not currenlty open, but
+ * may also be NULL if the file is open.
+ */
 int sync_chmod(const char *, mode_t, struct fuse_file_info *fi);
 
 /** Change the owner and group of a file
