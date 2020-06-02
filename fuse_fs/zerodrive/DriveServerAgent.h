@@ -1,11 +1,45 @@
 #pragma once
+
 #include "DriveAgent.h"
+#include "SharedQueue.h"
+#include "Protocol.h"
 
 class DriveServerAgent : public DriveAgent {
+
 private:
+    struct BackgroundTask {
+        DriveServerAgent *host;
+
+        explicit BackgroundTask(DriveServerAgent *driveServerAgent);
+
+        void run();
+
+        std::thread *stageChangeThread = nullptr;
+        bool running = false;
+
+        void stageChanges();
+
+        SharedQueue<OperationRecord> unstagedChanges;
+
+        void addJournal(OperationRecord &r);
+    };
+
+    BackgroundTask *backgroundTask;
+    uint64_t server_stamp{};
+public:
+    uint64_t getServerStamp() const;
+
+    void handlePull(int sockfd, uint64_t last_sync);
+
 public:
     DriveServerAgent(const char *address, int port);
+
     ~DriveServerAgent() override;
+
+    void handleUpdate(int fd, const std::vector<std::string> &newFiles,
+                      const std::vector<std::string> &deleteFiles, const std::vector<std::string> &newDirs,
+                      const std::vector<std::string> &deleteDirs,
+                      const std::vector<std::pair<std::string,std::string>> &renameDirs);
 
     int Write(const char *path, const char *buf, size_t size, off_t offset, struct fuse_file_info *fi) override;
 
@@ -14,6 +48,8 @@ public:
     int Open(const char *path, struct fuse_file_info *fi) override;
 
     int Mkdir(const char *path, mode_t mode) override;
+
+    int Unlink(const char *path) override;
 
     int Rmdir(const char *path) override;
 
@@ -37,7 +73,6 @@ public:
 
     int Read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi) override;
 
-private:
-    int broadcastChanges(enum Message msg, std::vector<std::string> detail);
+//    int broadcastChanges(enum Operation_t msg, std::vector<std::string> detail);
 };
 

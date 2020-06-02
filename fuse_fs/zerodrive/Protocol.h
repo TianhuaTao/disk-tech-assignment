@@ -1,6 +1,9 @@
 #pragma once
+#include <string>
+#include <utility>
+#include <vector>
 
-enum Message{
+enum Operation_t{
     NONE,
     WRITE_DONE,//1
     RENAME,//2
@@ -12,6 +15,26 @@ enum Message{
     REMOVE,
     CREATE_DIR,
     REQUEST_FILE, // 1
+    OPEN,
+    UNLINK,
+    UPDATE,
+    DELETE,
+    PUSH,
+    RENAME_DIR,
+    PULL,
+    UP_TO_DATE
+};
+
+struct OperationRecord{
+    Operation_t type;
+    std::vector<std::string> args;
+
+    OperationRecord(Operation_t t, const std::string& arg):type(t){
+        args.push_back(arg);
+    }
+    OperationRecord(Operation_t t, std::vector<std::string> a):type(t),args(a){
+
+    }
 };
 
 extern int Message_Number[11];

@@ -1,7 +1,25 @@
 #include "DriveAgent.h"
+#include "SharedQueue.h"
 
 class DriveClientAgent : public DriveAgent {
+
 private:
+    struct BackgroundUpdater{
+        DriveClientAgent* host;
+        explicit BackgroundUpdater(DriveClientAgent* driveClientAgent);
+        void run();
+        std::thread *updatingThread = nullptr;
+        bool running = false;
+
+        void update();
+        SharedQueue<OperationRecord> dirtyChanges;
+
+
+    };
+
+    BackgroundUpdater *backgroundUpdater;
+    uint64_t client_stamp{};
+    uint64_t last_sync{};
 public:
     DriveClientAgent(const char *address, int port);
     ~DriveClientAgent() override;
@@ -36,18 +54,20 @@ public:
     void *Init(struct fuse_conn_info *conn,
                struct fuse_config *cfg) override;
 
-    void onMsgWriteDone(std::string path) override;
+    int Unlink(const char *path) override;
 
-    void onMsgCreate(std::string path, mode_t mode) override;
-
-    void onMsgMkdir(std::string path, mode_t mode) override;
-
-    void onMsgRename(std::string from, std::string to) override;
-
-    void onMsgRmdir(std::string path) override;
-
-    void onMsgChmod(std::string path, mode_t mode) override;
+//    void onMsgWriteDone(std::string path) override;
+//
+//    void onMsgCreate(std::string path, mode_t mode) override;
+//
+//    void onMsgMkdir(std::string path, mode_t mode) override;
+//
+//    void onMsgRename(std::string from, std::string to) override;
+//
+//    void onMsgRmdir(std::string path) override;
+//
+//    void onMsgChmod(std::string path, mode_t mode) override;
 
 private:
-    int broadcastChanges(enum Message msg, std::vector<std::string> detail);
+//    int broadcastChanges(enum Operation_t msg, std::vector<std::string> detail);
 };

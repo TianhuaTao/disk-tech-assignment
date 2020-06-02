@@ -13,6 +13,8 @@
 #include "DriveClientAgent.h"
 #include "op.h"
 #include <signal.h>
+#include "zerodrive_common.h"
+using  namespace ZeroDrive;
 DriveAgent* localAgent;
 static const struct fuse_operations sync_oper = {
 
@@ -24,7 +26,7 @@ static const struct fuse_operations sync_oper = {
 
     sync_mkdir, // int (*mkdir) (const char *, mode_t);
 
-    nullptr, // int (*unlink) (const char *);
+    sync_unlink, // int (*unlink) (const char *);
 
     sync_rmdir, // int (*rmdir) (const char *);
 
@@ -194,6 +196,7 @@ int main(int argc, char *argv[])
     }
     printf("The prefix is %s\n", global_prefix);
     printf("The tmp dir is %s\n", get_tmp_dir());
+    printf("The journal dir is %s\n", get_journal_dir());
 
     if (options.server && options.client)
     {
@@ -208,22 +211,21 @@ int main(int argc, char *argv[])
     }
     else
     {
-        auto passwd = inputPassword();
-        if (check_passwd(passwd))
-        {
-            // check good
-        }
-        else
-        {
-            printf("Wrong password\n");
-            fuse_opt_free_args(&args);
-            return 1;
-        }
+//        auto passwd = inputPassword();
+//        if (check_passwd(passwd))
+//        {
+//            // check good
+//        }
+//        else
+//        {
+//            printf("Wrong password\n");
+//            fuse_opt_free_args(&args);
+//            return 1;
+//        }
         client_init();
     }
     ret = fuse_main(args.argc, args.argv, &sync_oper, NULL);
     fuse_opt_free_args(&args);
-    printf("Return\n");
 
     return ret;
 }

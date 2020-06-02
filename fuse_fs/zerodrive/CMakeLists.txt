@@ -22,4 +22,4 @@ add_executable(zerodrive
         NetworkAgent.cpp
         FileOperation.h
         FileOperation.cpp
-        )
+        zerodrive_common.h zerodrive_common.cpp SharedQueue.h)

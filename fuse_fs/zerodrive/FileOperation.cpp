@@ -1,7 +1,7 @@
 #define FUSE_USE_VERSION 31
 
 #include "FileOperation.h"
-
+#include "zerodrive_common.h"
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <cassert>
@@ -15,9 +15,9 @@
 #include <iostream>
 #include "op.h"
 #include "Protocol.h"
-
+#include "zerodrive_common.h"
 #define DEBUG_FO
-
+using namespace ZeroDrive;
 FileOperation::FileOperation() {
     printf("File System init complete\n");
 }
@@ -60,10 +60,9 @@ void *FileOperation::Init(struct fuse_conn_info *conn, struct fuse_config *cfg) 
 
 int FileOperation::Read(const char *path, char *buf, size_t size, 
                     off_t offset, struct fuse_file_info *fi) {
-    std::cerr<<"[debug] Read, path="<<path<<std::endl;
+    std::cout<<"[FileOperation] Read, path="<<path<<std::endl;
     int fd;
     int res;
-    printf("[debug] read\n");
     CONVERT_PATH(real_path, path);
     if (fi == nullptr)
         fd = open(real_path, O_RDONLY);
@@ -84,7 +83,7 @@ int FileOperation::Read(const char *path, char *buf, size_t size,
 }
 
 int FileOperation::Getattr(const char *path, struct stat *stbuf, struct fuse_file_info *fi) {
-    //std::cerr<<"[debug] Getattr, path="<<path<<std::endl;
+//    std::cout<<"[FileOperation] Getattr, path="<<path<<std::endl;
     (void) fi;
     int res;
     CONVERT_PATH(real_path, path)
@@ -100,11 +99,10 @@ int FileOperation::Getattr(const char *path, struct stat *stbuf, struct fuse_fil
 int FileOperation::Write(const char *path, const char *buf, size_t size, 
             off_t offset, struct fuse_file_info *fi) {
 #ifdef DEBUG_FO
-    std::cerr<<"[debug] Write, path="<<path<<std::endl;
+    std::cerr<<"[FileOperation] Write, path="<<path<<std::endl;
 #endif
     int fd;
     int res;
-    printf("[debug] write\n");
     CONVERT_PATH(real_path, path);
 
     (void) fi;
@@ -128,7 +126,7 @@ int FileOperation::Write(const char *path, const char *buf, size_t size,
 
 int FileOperation::Rename(const char *from, const char *to, unsigned int flags) {
 #ifdef DEBUG_FO
-    std::cerr<<"[debug] Rename, from="<<from<<", to="<<to<<std::endl;
+    std::cerr<<"[FileOperation] Rename, from="<<from<<", to="<<to<<std::endl;
 #endif
     int res;
     CONVERT_PATH(real_from, from)
@@ -145,10 +143,10 @@ int FileOperation::Rename(const char *from, const char *to, unsigned int flags) 
 
 int FileOperation::Open(const char *path, struct fuse_file_info *fi) {
 #ifdef DEBUG_FO
-    std::cerr<<"[debug] Open, path="<<path<<std::endl;
+    std::cerr<<"[FileOperation] Open, path="<<path<<std::endl;
 #endif
+
     int res;
-    printf("[debug] open\n");
     CONVERT_PATH(real_path, path);
     res = open(real_path, fi->flags);
     if (res == -1)
@@ -162,7 +160,7 @@ int FileOperation::Open(const char *path, struct fuse_file_info *fi) {
 int FileOperation::Readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offset, struct fuse_file_info *fi,
                           enum fuse_readdir_flags flags) {
 #ifdef DEBUG_FO
-    std::cerr<<"[debug] Readdir, path="<<path<<std::endl;
+    std::cout<<"[FileOperation] Readdir, path="<<path<<std::endl;
 #endif
     DIR *dp;
     struct dirent *de;
@@ -193,7 +191,7 @@ int FileOperation::Readdir(const char *path, void *buf, fuse_fill_dir_t filler, 
 
 int FileOperation::Create(const char *path, mode_t mode, struct fuse_file_info *fi) {
 #ifdef DEBUG_FO
-    std::cerr<<"[debug] Create, path="<<path<<std::endl;
+    std::cerr<<"[FileOperation] Create, path="<<path<<std::endl;
 #endif
     int res;
     CONVERT_PATH(real_path, path);
@@ -209,7 +207,7 @@ int FileOperation::Create(const char *path, mode_t mode, struct fuse_file_info *
 
 int FileOperation::Mkdir(const char *path, mode_t mode) {
 #ifdef DEBUG_FO
-    std::cerr<<"[debug] Mkdir, path="<<path<<std::endl;
+    std::cerr<<"[FileOperation] Mkdir, path="<<path<<std::endl;
 #endif
     int res;
     CONVERT_PATH(real_path, path)
@@ -223,7 +221,7 @@ int FileOperation::Mkdir(const char *path, mode_t mode) {
 
 int FileOperation::Rmdir(const char *path) {
 #ifdef DEBUG_FO
-    std::cerr<<"[debug] Rmdir, path="<<path<<std::endl;
+    std::cerr<<"[FileOperation] Rmdir, path="<<path<<std::endl;
 #endif
     int res;
     CONVERT_PATH(real_path, path)
@@ -237,7 +235,7 @@ int FileOperation::Rmdir(const char *path) {
 
 int FileOperation::Symlink(const char *from, const char *to) {
 #ifdef DEBUG_FO
-    std::cerr<<"[debug] Symlink, from="<<from<<", to="<<to<<std::endl;
+    std::cerr<<"[FileOperation] Symlink, from="<<from<<", to="<<to<<std::endl;
 #endif
     int res;
     CONVERT_PATH(real_from, from)
@@ -252,7 +250,7 @@ int FileOperation::Symlink(const char *from, const char *to) {
 
 int FileOperation::Chmod(const char *path, mode_t mode, struct fuse_file_info *fi) {
 #ifdef DEBUG_FO
-    std::cerr<<"[debug] Chmod, path="<<path<<", mode="<<mode<<std::endl;
+    std::cerr<<"[FileOperation] Chmod, path="<<path<<", mode="<<mode<<std::endl;
 #endif
     (void) fi;
     int res;
@@ -266,7 +264,7 @@ int FileOperation::Chmod(const char *path, mode_t mode, struct fuse_file_info *f
 
 int FileOperation::Chown(const char *path, uid_t uid, gid_t gid, struct fuse_file_info *fi) {
 #ifdef DEBUG_FO
-    std::cerr<<"[debug] Chown, path="<<path<<", uid="<<uid<<", gid="<<gid<<std::endl;
+    std::cerr<<"[FileOperation] Chown, path="<<path<<", uid="<<uid<<", gid="<<gid<<std::endl;
 #endif
     (void) fi;
     int res;
@@ -279,7 +277,7 @@ int FileOperation::Chown(const char *path, uid_t uid, gid_t gid, struct fuse_fil
 
 int FileOperation::Readlink(const char *path, char *buf, size_t size) {
 #ifdef DEBUG_FO
-    std::cerr<<"[debug] Readlink, path="<<path<<std::endl;
+    std::cerr<<"[FileOperation] Readlink, path="<<path<<std::endl;
 #endif
     int res;
     CONVERT_PATH(real_path, path)
@@ -301,4 +299,46 @@ bool FileOperation::checkExist(const char *path) {
 bool FileOperation::checkExistReal(const char *realpath) {
     struct stat buffer{};
     return (stat(realpath, &buffer)==0);
+}
+
+int FileOperation::Unlink(const char *path) {
+#ifdef DEBUG_FO
+    std::cerr<<"[FileOperation] Unlink, path="<<path<<std::endl;
+#endif
+    int res;
+    CONVERT_PATH(real_path, path)
+
+    res = unlink(real_path);
+    if (res == -1)
+        return -errno;
+
+    return 0;
+}
+
+bool FileOperation::checkIsDir(const char *path) {
+    CONVERT_PATH(real_path, path)
+
+    struct stat statbuf;
+    if(stat(real_path, &statbuf)!=0)
+        return  false;
+    return (bool)S_ISDIR(statbuf.st_mode);
+}
+
+std::vector<std::string> FileOperation::getDirEntries(const char *realPath) {
+    DIR* dir;
+    std::vector<std::string> ret;
+    struct dirent* ent;
+    if((dir=opendir(realPath))!= NULL){
+        while ((ent=readdir(dir))!=NULL){
+            ret.emplace_back(ent->d_name);
+        }
+        closedir(dir);
+    } else{
+        printf("[FileOperation] cannot read dir %s\n",realPath);
+    }
+    return ret;
+}
+
+std::vector<std::string> FileOperation::getJournalList() {
+    return getDirEntries(ZeroDrive::get_journal_dir());
 }

@@ -48,10 +48,10 @@ RM = /home/sam/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/201.7223.86/bin/cm
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive
+CMAKE_SOURCE_DIR = /home/sam/dev/zerodrive
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug
+CMAKE_BINARY_DIR = /home/sam/dev/zerodrive/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/CMakeFiles /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/sam/dev/zerodrive/cmake-build-debug/CMakeFiles /home/sam/dev/zerodrive/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/sam/dev/zerodrive/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -339,6 +339,33 @@ zerodrive.cpp.s:
 	$(MAKE) -f CMakeFiles/zerodrive.dir/build.make CMakeFiles/zerodrive.dir/zerodrive.cpp.s
 .PHONY : zerodrive.cpp.s
 
+zerodrive_common.o: zerodrive_common.cpp.o
+
+.PHONY : zerodrive_common.o
+
+# target to build an object file
+zerodrive_common.cpp.o:
+	$(MAKE) -f CMakeFiles/zerodrive.dir/build.make CMakeFiles/zerodrive.dir/zerodrive_common.cpp.o
+.PHONY : zerodrive_common.cpp.o
+
+zerodrive_common.i: zerodrive_common.cpp.i
+
+.PHONY : zerodrive_common.i
+
+# target to preprocess a source file
+zerodrive_common.cpp.i:
+	$(MAKE) -f CMakeFiles/zerodrive.dir/build.make CMakeFiles/zerodrive.dir/zerodrive_common.cpp.i
+.PHONY : zerodrive_common.cpp.i
+
+zerodrive_common.s: zerodrive_common.cpp.s
+
+.PHONY : zerodrive_common.s
+
+# target to generate assembly for a file
+zerodrive_common.cpp.s:
+	$(MAKE) -f CMakeFiles/zerodrive.dir/build.make CMakeFiles/zerodrive.dir/zerodrive_common.cpp.s
+.PHONY : zerodrive_common.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -372,6 +399,9 @@ help:
 	@echo "... zerodrive.o"
 	@echo "... zerodrive.i"
 	@echo "... zerodrive.s"
+	@echo "... zerodrive_common.o"
+	@echo "... zerodrive_common.i"
+	@echo "... zerodrive_common.s"
 .PHONY : help
 
 

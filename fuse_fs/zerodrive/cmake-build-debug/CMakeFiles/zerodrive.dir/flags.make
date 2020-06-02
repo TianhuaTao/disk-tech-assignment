@@ -6,5 +6,5 @@ CXX_FLAGS = -g   -std=gnu++14
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/. -I/usr/local/include/fuse3 
+CXX_INCLUDES = -I/home/sam/dev/zerodrive/. -I/usr/local/include/fuse3 
 

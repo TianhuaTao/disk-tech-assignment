@@ -23,6 +23,8 @@ public:
 
     void setRole(Role role);
 
+    void pullfromServer(uint64_t last_sync);
+
 private:
     DriveAgent *hostDriveAgent = nullptr;
     Role role = UNKNOWN;
@@ -49,18 +51,21 @@ public:
 
     int sendRaw(int socket_fd, const char *data, int length);
 
-    int sendMessage(int socket_fd, enum Message msg, const std::vector<std::string> &detail);
+    int sendMessage(int socket_fd, enum Operation_t msg, const std::vector<std::string> &detail);
 
-    int sendMessageToAll(enum Message msg, const std::vector<std::string> &detail);
+//    int sendMessageToAll(enum Operation_t msg, const std::vector<std::string> &detail);
 
     int disconnect();
 
-    int requestFile(std::string path);
+//    int requestFile(std::string path);
 
-    void sendRequestedFile(int fd, std::string basicString);
-
+//    void sendRequestedFile(int fd, std::string path);
+    void uploadFile(int remote_fd, const std::string& path);
+    void downloadFile(int remote_fd, const std::string& path);
     void freeSocket();
-
+    void pushToServer(std::set<std::string > &newFiles , std::set<std::string > &deleteFiles,
+                      std::set<std::string > &newDirs,std::set<std::string > &deleteDirs,
+                       std::set<std::pair<std::string,std::string>> &renameDirs);
 private:
     void error(const std::string &msg) {
         std::cerr << "[Error] " << msg << std::endl;
@@ -71,9 +76,10 @@ private:
     int readBytes(int fd, char *buffer, int length);
 
     int32_t readInt32(int fd);
-
+    uint64_t readUint64(int fd);
     std::string readString(int fd);
 
     sockaddr_in _server_addr{}; // a record of server address
+    enum Operation_t readToken(int sockfd);
 };
 

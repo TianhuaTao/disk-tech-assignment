@@ -20,3 +20,7 @@
 void DriveAgent::freeSocket() {
     networkAgent->freeSocket();
 }
+
+int DriveAgent::Unlink(const char *path) {
+    return 0;
+}
