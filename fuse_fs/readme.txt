@@ -1,15 +1,10 @@
-Ubuntu 安装 fuse:
+Ubuntu 20.04 安装 fuse:
 sudo apt-get install fuse3 libfuse3-dev
 
-编译单个c文件：
-gcc -o hello hello.c `pkg-config fuse3 --cflags --libs`
+编译 Zerodrive 请使用 Makefile
 
-编译c和cpp文件：
-使用 makefile
+运行 Server：
+./runserver.sh
 
-运行helloworld：
-./helloworld tmp
-
-卸载：
-fusermount3 -u tmp/
-
+运行 Client：
+./runclient.sh
