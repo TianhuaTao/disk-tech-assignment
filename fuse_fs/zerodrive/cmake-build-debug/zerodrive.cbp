@@ -122,6 +122,9 @@
 		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/Protocol.h">
 			<Option target="zerodrive"/>
 		</Unit>
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/SharedQueue.h">
+			<Option target="zerodrive"/>
+		</Unit>
 		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/op.cpp">
 			<Option target="zerodrive"/>
 		</Unit>
@@ -132,6 +135,12 @@
 			<Option target="zerodrive"/>
 		</Unit>
 		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/zerodrive.h">
+			<Option target="zerodrive"/>
+		</Unit>
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/zerodrive_common.cpp">
+			<Option target="zerodrive"/>
+		</Unit>
+		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/zerodrive_common.h">
 			<Option target="zerodrive"/>
 		</Unit>
 		<Unit filename="/home/sam/dev/disk-tech-assignment/fuse_fs/zerodrive/CMakeLists.txt">

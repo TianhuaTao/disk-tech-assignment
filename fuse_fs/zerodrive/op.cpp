@@ -4,54 +4,11 @@
 #include <cstdio>
 #include "op.h"
 #include <unistd.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <dirent.h>
-#include <cerrno>
 #include <cstring>
-#include <sys/types.h>
-#include <pwd.h>
 #include "DriveAgent.h"
+#include "zerodrive_common.h"
 
-extern const char* global_prefix;
-
-const char *get_homedir() {
-    static int initialized = 0;
-    static const char *homedir;
-    if (!initialized) {
-        struct passwd *pw = getpwuid(getuid());
-        homedir = pw->pw_dir;
-        initialized = 1;
-    }
-    return homedir;
-}
-
-const char *get_data_dir() {
-    static int initialized = 0;
-    static char datadir[512];
-    if (!initialized) {
-        memset(datadir, 0, sizeof datadir);
-        strcat(datadir, get_homedir());
-        strcat(datadir, global_prefix);
-        initialized = 1;
-    }
-    return datadir;
-}
-
-const char *get_tmp_dir() {
-    static int initialized = 0;
-    static char tmpdir[512];
-    if (!initialized) {
-        memset(tmpdir, 0, sizeof tmpdir);
-        strcat(tmpdir, "/tmp");
-        strcat(tmpdir, global_prefix);
-        int ret = mkdir(tmpdir, 0777);  // create dir
-        // printf("Mkdir: %d\n" , ret);
-        initialized = 1;
-    }
-    return tmpdir;
-}
-
+using namespace ZeroDrive;
 
 /** Get file attributes.
  *
@@ -100,14 +57,7 @@ int sync_mkdir(const char *path, mode_t mode) {
 
 /** Remove a file */
 int sync_unlink(const char *path) {
-    int res;
-    CONVERT_PATH(real_path, path)
-
-    res = unlink(real_path);
-    if (res == -1)
-        return -errno;
-
-    return 0;
+    return localAgent->Unlink(path);
 }
 
 /** Remove a directory */

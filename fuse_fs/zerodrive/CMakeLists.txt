@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(zerodrive)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 include_directories(.)
 include_directories(/usr/local/include/fuse3)
@@ -22,4 +22,4 @@ add_executable(zerodrive
         NetworkAgent.cpp
         FileOperation.h
         FileOperation.cpp
-        )
+        zerodrive_common.h zerodrive_common.cpp SharedQueue.h)

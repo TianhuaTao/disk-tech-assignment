@@ -7,6 +7,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/zerodrive.dir/Protocol.cpp.o"
   "CMakeFiles/zerodrive.dir/op.cpp.o"
   "CMakeFiles/zerodrive.dir/zerodrive.cpp.o"
+  "CMakeFiles/zerodrive.dir/zerodrive_common.cpp.o"
   "zerodrive"
   "zerodrive.pdb"
 )
