@@ -2,4 +2,4 @@
 
 Assignment 1: kv-engine
 
-Assignment 2: userspace file system with FUSE
+Assignment 2: ZeroDrive, a userspace file system with FUSE
